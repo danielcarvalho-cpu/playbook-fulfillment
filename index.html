@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayBook Fulfillment | CIE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F5F6FA;color:#2d2d2d;display:flex;min-height:100vh}
+a{color:#0066cc;text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* SIDEBAR */
+.sidebar{width:280px;min-width:280px;background:#1A1A2E;color:#fff;height:100vh;position:fixed;top:0;left:0;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sidebar-header{background:#FFE600;padding:20px 16px 14px;color:#1A1A2E}
+.sidebar-header h2{font-size:14px;font-weight:800;letter-spacing:.5px;text-transform:uppercase}
+.sidebar-header p{font-size:11px;margin-top:4px;opacity:.8}
+.lang-toggle{display:flex;margin:12px 16px;background:#0d0d1f;border-radius:6px;overflow:hidden}
+.lang-btn{flex:1;padding:7px 0;text-align:center;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s}
+.lang-btn.active{background:#FFE600;color:#1A1A2E}
+.nav-section{padding:8px 0}
+.nav-title{font-size:10px;font-weight:700;text-transform:uppercase;color:#888;padding:8px 16px 4px;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;padding:9px 16px;font-size:12px;color:#aaa;cursor:pointer;transition:all .15s;border-left:3px solid transparent;user-select:none;text-decoration:none}
+.nav-item:hover{background:rgba(255,255,255,.09);color:#fff;border-left-color:rgba(255,230,0,.4);padding-left:20px}
+.nav-item.active{background:rgba(255,230,0,.1);color:#FFE600;border-left-color:#FFE600;font-weight:700}
+.nav-item .num{background:#2a2a3e;color:#777;font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;margin-right:10px;min-width:22px;text-align:center;flex-shrink:0;transition:all .15s}
+.nav-item:hover .num{background:#333;color:#FFE600}
+.nav-item.active .num{background:#FFE600;color:#1A1A2E}
+.nav-item .nav-arrow{margin-left:auto;opacity:0;font-size:10px;transition:opacity .15s}
+.nav-item:hover .nav-arrow{opacity:.5}
+.sidebar-footer{margin-top:auto;padding:16px;font-size:10px;color:#555;border-top:1px solid #2a2a3e}
+
+/* MAIN */
+.main{margin-left:280px;flex:1;min-height:100vh}
+.topbar{background:#fff;border-bottom:1px solid #e5e5e5;padding:14px 32px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar h1{font-size:16px;font-weight:700;color:#1A1A2E}
+.topbar .version{font-size:11px;color:#999;background:#f0f0f0;padding:3px 8px;border-radius:4px}
+.topbar .lang-btn.active{background:#1A1A2E;color:#FFE600!important}
+.content{padding:32px;max-width:960px}
+
+/* SECTION */
+.section{background:#fff;border-radius:10px;padding:32px;margin-bottom:24px;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #eee}
+.section-badge{display:inline-flex;align-items:center;gap:6px;background:#FFF9C4;color:#7a6200;font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.5px}
+.section h2{font-size:22px;font-weight:800;color:#1A1A2E;margin-bottom:6px}
+.section .subtitle{font-size:13px;color:#888;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #f0f0f0}
+.section h3{font-size:15px;font-weight:700;color:#1A1A2E;margin:22px 0 10px}
+.section h4{font-size:13px;font-weight:700;color:#444;margin:16px 0 8px}
+.section p{font-size:13px;line-height:1.7;color:#555;margin-bottom:10px}
+.section ul,ol{padding-left:20px;margin-bottom:12px}
+.section li{font-size:13px;line-height:1.7;color:#555;margin-bottom:4px}
+
+/* META ROW */
+.meta-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.meta-chip{background:#f8f8f8;border:1px solid #eee;border-radius:6px;padding:8px 14px;font-size:12px}
+.meta-chip strong{display:block;font-size:10px;text-transform:uppercase;color:#999;margin-bottom:2px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;margin:12px 0 20px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#1A1A2E;color:#fff;padding:9px 12px;text-align:left;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+td{padding:8px 12px;border-bottom:1px solid #f0f0f0;color:#444;vertical-align:top}
+tr:hover td{background:#fafafa}
+tr:last-child td{border-bottom:none}
+.td-link{color:#0066cc;cursor:pointer;font-weight:600;transition:color .15s}
+.td-link:hover{color:#1A1A2E;text-decoration:underline}
+tr:has(.td-link):hover td{background:#f0f4ff}
+.td-link::after{content:" →";font-size:10px;opacity:.5}
+td strong{color:#1A1A2E}
+
+/* ALERT BOX */
+.alert{border-left:4px solid #FFE600;background:#FFFDE7;padding:12px 16px;border-radius:0 6px 6px 0;margin:16px 0;font-size:12px;color:#555;line-height:1.6}
+.alert.red{border-color:#e53935;background:#FFEBEE}
+.alert.green{border-color:#43a047;background:#E8F5E9}
+.alert.blue{border-color:#1976d2;background:#E3F2FD}
+.alert strong{display:block;margin-bottom:4px;color:#333}
+
+/* CHECKLIST */
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:10px;font-size:13px;color:#555;padding:6px 0;border-bottom:1px dashed #f0f0f0}
+.checklist li:last-child{border-bottom:none}
+.checklist li::before{content:"☐";font-size:16px;color:#ccc;margin-top:-2px;min-width:20px}
+
+/* FLOW BOX */
+.flow{background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:16px 20px;font-family:monospace;font-size:12px;color:#333;line-height:2;margin:12px 0}
+
+/* GATE CARD */
+.gate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.gate-card{background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:14px;text-align:center}
+.gate-card .gate-num{font-size:24px;font-weight:800;color:#1A1A2E}
+.gate-card .gate-label{font-size:11px;color:#888;margin-top:2px}
+
+/* SAVING BADGE */
+.saving{display:inline-block;background:#E8F5E9;color:#2e7d32;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:6px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1A1A2E 0%,#16213E 50%,#0F3460 100%);color:#fff;border-radius:10px;padding:40px 32px;margin-bottom:24px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;background:rgba(255,230,0,.08);border-radius:50%}
+.hero h1{font-size:28px;font-weight:800;margin-bottom:8px}
+.hero p{font-size:14px;opacity:.8;max-width:600px;line-height:1.6}
+.hero .hero-meta{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap}
+.hero .hero-chip{background:rgba(255,255,255,.1);padding:6px 14px;border-radius:20px;font-size:12px}
+
+/* LESSON CARD */
+.lesson-card{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;margin-bottom:12px;border-left:4px solid #FFE600}
+.lesson-card .site-tag{display:inline-block;background:#1A1A2E;color:#FFE600;font-size:10px;font-weight:700;padding:2px 8px;border-radius:3px;margin-bottom:8px}
+.lesson-card h4{font-size:13px;font-weight:700;color:#1A1A2E;margin-bottom:6px}
+.lesson-card p{font-size:12px;color:#666;line-height:1.6}
+
+/* RESPONSIVE */
+@media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.gate-grid{grid-template-columns:1fr 1fr}}
+
+/* LANGUAGE */
+.es{display:none}
+.pt{display:block}
+span.pt{display:inline}
+span.es{display:none}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <h2>PlayBook Fulfillment</h2>
+    <p class="pt">Layout, Demarcação e Instalação</p>
+    <p class="es">Layout, Demarcación e Instalación</p>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="pt" onclick="setLang('pt')">🇧🇷 PT</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')">🇪🇸 ES</button>
+  </div>
+  <div class="nav-section">
+    <div class="nav-title pt">Conteúdo</div>
+    <div class="nav-title es">Contenido</div>
+    <div class="nav-item active" onclick="goTo('s0')"><span class="num">0</span><span class="pt">Visão Geral</span><span class="es">Vista General</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s1')"><span class="num">1</span><span class="pt">Como Usar</span><span class="es">Cómo Usar</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s2')"><span class="num">2</span><span class="pt">Premissas e Diagnóstico</span><span class="es">Premisas y Diagnóstico</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s3')"><span class="num">3</span><span class="pt">Gates do Projeto</span><span class="es">Gates del Proyecto</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s4')"><span class="num">4</span><span class="pt">Tipos de Nave e Layout</span><span class="es">Tipos de Nave y Layout</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s5')"><span class="num">5</span><span class="pt">Layout Operativo</span><span class="es">Layout Operativo</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s6')"><span class="num">6</span><span class="pt">Layout Complementar</span><span class="es">Layout Complementario</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s7')"><span class="num">7</span><span class="pt">Demarcação de Piso</span><span class="es">Demarcación de Piso</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s8')"><span class="num">8</span><span class="pt">Estruturas de Armazenamento</span><span class="es">Estructuras de Almacenamiento</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s9')"><span class="num">9</span><span class="pt">Equipamentos e Instalação</span><span class="es">Equipos e Instalación</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s10')"><span class="num">10</span><span class="pt">Comunicação Visual e 5S</span><span class="es">Comunicación Visual y 5S</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s11')"><span class="num">11</span><span class="pt">Go-Live e Ramp-Up</span><span class="es">Go-Live y Ramp-Up</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s12')"><span class="num">12</span><span class="pt">Projetos Benchmark</span><span class="es">Proyectos Benchmark</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s13')"><span class="num">13</span><span class="pt">Lições Aprendidas</span><span class="es">Lecciones Aprendidas</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s14')"><span class="num">14</span><span class="pt">Packing Mono 3.0</span><span class="es">Packing Mono 3.0</span><span class="nav-arrow">›</span></div>
+    <div class="nav-item" onclick="goTo('s15')"><span class="num">15</span><span class="pt">OPS Model — Book de Nave</span><span class="es">OPS Model — Book de Nave</span><span class="nav-arrow">›</span></div>
+  </div>
+  <div style="padding:12px 16px;border-top:1px solid #2a2a3e">
+    <a href="calculadora.html" style="display:flex;align-items:center;gap:8px;background:#FFE600;color:#1A1A2E;padding:10px 12px;border-radius:7px;font-size:12px;font-weight:800;text-decoration:none;margin-bottom:6px">
+      🧮 <span class="pt">Calculadoras de Buffer</span><span class="es">Calculadoras de Buffer</span>
+    </a>
+    <a href="calc-cheapest.html" style="display:flex;align-items:center;gap:8px;background:rgba(255,143,0,0.15);color:#FF8F00;border:1px solid rgba(255,143,0,0.4);padding:10px 12px;border-radius:7px;font-size:12px;font-weight:800;text-decoration:none">
+      📦 <span class="pt">Área Cheapest</span><span class="es">Área Cheapest</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">CIE · <span class="pt">Versão</span><span class="es">Versión</span> 1.0 · 2026</div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <h1 class="pt">PlayBook de Fulfillment — CIE</h1>
+      <h1 class="es">PlayBook de Fulfillment — CIE</h1>
+      <span class="version">v1.0 · 2026</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:11px;color:#aaa" class="pt">Idioma:</span>
+      <span style="font-size:11px;color:#aaa" class="es">Idioma:</span>
+      <div style="display:flex;background:#f0f0f0;border-radius:6px;overflow:hidden;border:1px solid #e0e0e0">
+        <button class="lang-btn active" data-lang="pt" onclick="setLang('pt')"
+          style="padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s">
+          🇧🇷 PT
+        </button>
+        <button class="lang-btn" data-lang="es" onclick="setLang('es')"
+          style="padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s">
+          🇪🇸 ES
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- HERO -->
+    <div class="hero" id="s0">
+      <div class="pt">
+        <h1>PlayBook de Fulfillment</h1>
+        <p>Guia técnico de referência para projeto, implantação e validação de layouts operacionais em centros de distribuição (CADs) — da demarcação de piso à instalação de estruturas e equipamentos.</p>
+        <div class="hero-meta">
+          <span class="hero-chip">📦 13 Seções</span>
+          <span class="hero-chip">🏭 Layout · Demarcação · Equipamentos</span>
+          <span class="hero-chip">🌎 Rede LatAm</span>
+          <span class="hero-chip">🔄 Gates 0–5</span>
+        </div>
+      </div>
+      <div class="es">
+        <h1>PlayBook de Fulfillment</h1>
+        <p>Guía técnica de referencia para el diseño, implementación y validación de layouts operativos en centros de distribución (CADs) — desde la demarcación de piso hasta la instalación de estructuras y equipos.</p>
+        <div class="hero-meta">
+          <span class="hero-chip">📦 13 Secciones</span>
+          <span class="hero-chip">🏭 Layout · Demarcación · Equipos</span>
+          <span class="hero-chip">🌎 Red LatAm</span>
+          <span class="hero-chip">🔄 Gates 0–5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 1 -->
+    <div class="section" id="s1">
+      <div class="section-badge">01</div>
+      <div class="pt">
+        <h2>Como Usar Este PlayBook</h2>
+        <p class="subtitle">Guia de navegação, perfis de usuário e ferramentas de apoio</p>
+        <h3>O que é</h3>
+        <p>Este PlayBook é a consolidação de boas práticas, lições aprendidas e padrões técnicos extraídos de projetos reais em múltiplos sites — Brasil, México e LatAm — com o objetivo de reduzir retrabalho, acelerar o ramp-up e garantir a qualidade das implementações.</p>
+        <h3>Para quem é</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Perfil</th><th>Uso principal</th></tr>
+          <tr><td><strong>Especialista CIE Nuevas Naves</strong></td><td>Gates 0 a 3 — premissas, layout e compras</td></tr>
+          <tr><td><strong>CIE Local / Analista de Site</strong></td><td>Gates 3 a 5 — instalação, go-live e sustentabilidade</td></tr>
+          <tr><td><strong>Engenharia de Planta</strong></td><td>Validação de estruturas, MHE e infraestrutura</td></tr>
+          <tr><td><strong>Start-up / Operações</strong></td><td>Fluxo operacional, demarcação e ramp-up</td></tr>
+          <tr><td><strong>MTM / Compras</strong></td><td>Book de compras e especificações técnicas</td></tr>
+        </table></div>
+        <div class="alert"><strong>Regra de ouro</strong>Leia as seções de Lições Aprendidas antes de iniciar qualquer gate. Os erros já foram cometidos — evite repeti-los.</div>
+        <h3>Ferramentas de apoio</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Ferramenta</th><th>Uso</th><th>Gate</th></tr>
+          <tr><td>Calculadora MHE</td><td>Dimensionamento de equipamentos logísticos</td><td>Gate 1</td></tr>
+          <tr><td>Calculadora de Batch</td><td>Capacidade de processamento</td><td>Gate 1</td></tr>
+          <tr><td>Calculadora de Baños</td><td>Dimensionamento de banheiros (~140k USD/nave)</td><td>Gate 0</td></tr>
+          <tr><td>Calculadora Buffer BatchSorter</td><td>Estações de buffer e sorter</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora Buffer Carrinhos de Picking</td><td>Dimensionamento de posições de buffer e quantidade mínima de carrinhos por área</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora Stages End-to-End</td><td>Tempo de ciclo completo</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora ESD</td><td>Extended Same Day — sorter no FC</td><td>Gate 3</td></tr>
+          <tr><td>Estudio de Patio (template)</td><td>Premissas e inputs para novo CAD</td><td>Gate 0</td></tr>
+          <tr><td>Portal WOW</td><td>Padrões visuais e LUPs por estrutura</td><td>Gates 3–5</td></tr>
+          <tr><td>Operational Readiness Checklist</td><td>Validação pré go-live</td><td>Gate 4</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Cómo Usar Este PlayBook</h2>
+        <p class="subtitle">Guía de navegación, perfiles de usuario y herramientas de apoyo</p>
+        <h3>Qué es</h3>
+        <p>Este PlayBook es la consolidación de buenas prácticas, lecciones aprendidas y estándares técnicos extraídos de proyectos reales en múltiples sites — Brasil, México y LatAm — con el objetivo de reducir el retrabajo, acelerar el ramp-up y garantizar la calidad de las implementaciones.</p>
+        <h3>Para quién es</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Perfil</th><th>Uso principal</th></tr>
+          <tr><td><strong>Especialista CIE Nuevas Naves</strong></td><td>Gates 0 a 3 — premisas, layout y compras</td></tr>
+          <tr><td><strong>CIE Local / Analista de Site</strong></td><td>Gates 3 a 5 — instalación, go-live y sustentabilidad</td></tr>
+          <tr><td><strong>Ingeniería de Planta</strong></td><td>Validación de estructuras, MHE e infraestructura</td></tr>
+          <tr><td><strong>Start-up / Operaciones</strong></td><td>Flujo operacional, demarcación y ramp-up</td></tr>
+          <tr><td><strong>MTM / Compras</strong></td><td>Book de compras y especificaciones técnicas</td></tr>
+        </table></div>
+        <div class="alert"><strong>Regla de oro</strong>Lea las secciones de Lecciones Aprendidas antes de iniciar cualquier gate. Los errores ya fueron cometidos — evite repetirlos.</div>
+        <h3>Herramientas de apoyo</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Herramienta</th><th>Uso</th><th>Gate</th></tr>
+          <tr><td>Calculadora MHE</td><td>Dimensionamiento de equipos logísticos</td><td>Gate 1</td></tr>
+          <tr><td>Calculadora de Batch</td><td>Capacidad de procesamiento</td><td>Gate 1</td></tr>
+          <tr><td>Calculadora de Baños</td><td>Dimensionamiento de baños (~140k USD/nave)</td><td>Gate 0</td></tr>
+          <tr><td>Calculadora Buffer BatchSorter</td><td>Estaciones de buffer y sorter</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora Buffer Carros de Picking</td><td>Dimensionamiento de posiciones de buffer y cantidad mínima de carros por área</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora Stages End-to-End</td><td>Tiempo de ciclo completo</td><td>Gate 2</td></tr>
+          <tr><td>Calculadora ESD</td><td>Extended Same Day — sorter en FC</td><td>Gate 3</td></tr>
+          <tr><td>Estudio de Patio (template)</td><td>Premisas e inputs para nuevo CAD</td><td>Gate 0</td></tr>
+          <tr><td>Portal WOW</td><td>Estándares visuales y LUPs por estructura</td><td>Gates 3–5</td></tr>
+          <tr><td>Operational Readiness Checklist</td><td>Validación pre go-live</td><td>Gate 4</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 -->
+    <div class="section" id="s2">
+      <div class="section-badge">02</div>
+      <div class="pt">
+        <h2>Premissas e Diagnóstico Inicial</h2>
+        <p class="subtitle">Gate 0 · Especialista CIE Nuevas Naves + Engineering Design</p>
+        <h3>Inputs obrigatórios — Estudo de Patio</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Input</th><th>Descrição</th></tr>
+          <tr><td><strong>Tipo de operação</strong></td><td>Full TT, Full NT, Híbrido, RC, XD, Triage Center</td></tr>
+          <tr><td><strong>Site de benchmark</strong></td><td>CAD de referência com perfil operacional similar</td></tr>
+          <tr><td><strong>Capacidade estática</strong></td><td>Total de SIs armazenáveis na nave</td></tr>
+          <tr><td><strong>Número de docas</strong></td><td>Por tipo: Inbound TT, NT, Transfer, Outbound, MWH, Returns</td></tr>
+          <tr><td><strong>Volume peak day</strong></td><td>Volume máximo de SIs no dia de pico</td></tr>
+          <tr><td><strong>Volumetria média / SI</strong></td><td>Volume médio por item (referência: 35L, excluindo &gt;100L)</td></tr>
+          <tr><td><strong>% CPG</strong></td><td>Percentual de produtos de consumo rápido no mix</td></tr>
+          <tr><td><strong>% Voluminosos</strong></td><td>Percentual de itens Non-Totable ou grande volume</td></tr>
+          <tr><td><strong>Binfullness teórico</strong></td><td>Ocupação esperada dos bins (referência: 50–55% NT / 43–60% TT)</td></tr>
+          <tr><td><strong>Tipo de nave</strong></td><td>Single Dock ou Double Dock</td></tr>
+        </table></div>
+        <h3>Exemplo real — RS03 e RS04</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro</th><th>RS03 — Full NT</th><th>RS04 — Full TT</th></tr>
+          <tr><td>Benchmark</td><td>SP10</td><td>SP18</td></tr>
+          <tr><td>Capacidade estática</td><td>690.000 SIs</td><td>2.300.000 SIs</td></tr>
+          <tr><td>Docas</td><td>20</td><td>27</td></tr>
+          <tr><td>Volume peak day</td><td>40.020 SIs</td><td>100.638 SIs</td></tr>
+        </table></div>
+        <h3>Checklist — Gate 0</h3>
+        <ul class="checklist">
+          <li>Estudo de Patio preenchido e validado com Network Design</li>
+          <li>Site de benchmark definido e justificado</li>
+          <li>Tipo de nave confirmado (Single / Double Dock)</li>
+          <li>Perfil TT / NT / Híbrido definido</li>
+          <li>Volumetria e % CPG confirmados com S&OP</li>
+          <li>Calculadora de Baños executada (~140k USD de cost avoidance por nave)</li>
+          <li>Rampa de acesso validada por SHE — verificar ART e conformidade para MHE</li>
+          <li>Infraestrutura de pátio validada: guardrails, taludes, áreas de manobra, cobertura de pedestres</li>
+          <li>Premissas Operacionais (RFP) formalizadas para contrato com desenvolvedor</li>
+          <li>Definição do fluxo Big Totable (TT ou NT) confirmada</li>
+        </ul>
+      </div>
+      <div class="es">
+        <h2>Premisas y Diagnóstico Inicial</h2>
+        <p class="subtitle">Gate 0 · Especialista CIE Nuevas Naves + Engineering Design</p>
+        <h3>Inputs obligatorios — Estudio de Patio</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Input</th><th>Descripción</th></tr>
+          <tr><td><strong>Tipo de operación</strong></td><td>Full TT, Full NT, Híbrido, RC, XD, Triage Center</td></tr>
+          <tr><td><strong>Site de benchmark</strong></td><td>CAD de referencia con perfil operativo similar</td></tr>
+          <tr><td><strong>Capacidad estática</strong></td><td>Total de SIs almacenables en la nave</td></tr>
+          <tr><td><strong>Número de muelles</strong></td><td>Por tipo: Inbound TT, NT, Transfer, Outbound, MWH, Returns</td></tr>
+          <tr><td><strong>Volumen peak day</strong></td><td>Volumen máximo de SIs en el día pico</td></tr>
+          <tr><td><strong>Volumetría media / SI</strong></td><td>Volumen medio por ítem (referencia: 35L, excluyendo &gt;100L)</td></tr>
+          <tr><td><strong>% CPG</strong></td><td>Porcentaje de productos de consumo rápido en el mix</td></tr>
+          <tr><td><strong>% Voluminosos</strong></td><td>Porcentaje de ítems Non-Totable o gran volumen</td></tr>
+          <tr><td><strong>Binfullness teórico</strong></td><td>Ocupación esperada de los bins (referencia: 50–55% NT / 43–60% TT)</td></tr>
+          <tr><td><strong>Tipo de nave</strong></td><td>Single Dock o Double Dock</td></tr>
+        </table></div>
+        <h3>Ejemplo real — RS03 y RS04</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parámetro</th><th>RS03 — Full NT</th><th>RS04 — Full TT</th></tr>
+          <tr><td>Benchmark</td><td>SP10</td><td>SP18</td></tr>
+          <tr><td>Capacidad estática</td><td>690.000 SIs</td><td>2.300.000 SIs</td></tr>
+          <tr><td>Muelles</td><td>20</td><td>27</td></tr>
+          <tr><td>Volumen peak day</td><td>40.020 SIs</td><td>100.638 SIs</td></tr>
+        </table></div>
+        <h3>Checklist — Gate 0</h3>
+        <ul class="checklist">
+          <li>Estudio de Patio completado y validado con Network Design</li>
+          <li>Site de benchmark definido y justificado</li>
+          <li>Tipo de nave confirmado (Single / Double Dock)</li>
+          <li>Perfil TT / NT / Híbrido definido</li>
+          <li>Volumetría y % CPG confirmados con S&OP</li>
+          <li>Calculadora de Baños ejecutada (~140k USD de cost avoidance por nave)</li>
+          <li>Rampa de acceso validada por SHE — verificar ART y conformidad para MHE</li>
+          <li>Infraestructura de patio validada: guardrails, taludes, áreas de maniobra, cobertura de peatones</li>
+          <li>Premisas Operacionales (RFP) formalizadas para contrato con desarrollador</li>
+          <li>Definición del flujo Big Totable (TT o NT) confirmada</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SECTION 3 -->
+    <div class="section" id="s3">
+      <div class="section-badge">03</div>
+      <div class="pt">
+        <h2>Gates do Projeto</h2>
+        <p class="subtitle">RACI e Entregas por Gate · Duração total: ~22 meses</p>
+        <div class="gate-grid">
+          <div class="gate-card"><div class="gate-num">0</div><div class="gate-label">Definição da Nave</div></div>
+          <div class="gate-card"><div class="gate-num">1</div><div class="gate-label">Layouts</div></div>
+          <div class="gate-card"><div class="gate-num">2</div><div class="gate-label">Detalhamento Técnico</div></div>
+          <div class="gate-card"><div class="gate-num">3</div><div class="gate-label">Compras + Handover</div></div>
+          <div class="gate-card"><div class="gate-num">4</div><div class="gate-label">Instalação + Go-Live</div></div>
+          <div class="gate-card"><div class="gate-num">5</div><div class="gate-label">Post-Mortem</div></div>
+        </div>
+        <!-- DIAGRAM: Gate Timeline -->
+        <div style="margin:20px 0;background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:20px 16px 12px">
+          <svg width="100%" viewBox="0 0 840 155" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
+            <line x1="70" y1="55" x2="770" y2="55" stroke="#ddd" stroke-width="3"/>
+            <!-- CIE Specialist span -->
+            <line x1="70" y1="125" x2="490" y2="125" stroke="#1A1A2E" stroke-width="2"/>
+            <polygon points="70,121 70,129 62,125" fill="#1A1A2E"/><polygon points="490,121 490,129 498,125" fill="#1A1A2E"/>
+            <text x="280" y="140" text-anchor="middle" font-size="9" fill="#1A1A2E" font-weight="700">CIE Especialista</text>
+            <!-- CIE Local span -->
+            <line x1="490" y1="125" x2="770" y2="125" stroke="#0F3460" stroke-width="2"/>
+            <polygon points="490,121 490,129 482,125" fill="#0F3460"/><polygon points="770,121 770,129 778,125" fill="#0F3460"/>
+            <text x="630" y="140" text-anchor="middle" font-size="9" fill="#0F3460" font-weight="700">CIE Local</text>
+            <!-- Gate 0 -->
+            <circle cx="70" cy="55" r="28" fill="#1A1A2E"/>
+            <text x="70" y="50" text-anchor="middle" font-size="17" font-weight="800" fill="#FFE600">0</text>
+            <text x="70" y="62" text-anchor="middle" font-size="7" fill="#999">GATE</text>
+            <text x="70" y="95" text-anchor="middle" font-size="9" fill="#555">Definição</text>
+            <text x="70" y="107" text-anchor="middle" font-size="9" fill="#555">da Nave</text>
+            <!-- Gate 1 -->
+            <circle cx="210" cy="55" r="28" fill="#1A1A2E"/>
+            <text x="210" y="50" text-anchor="middle" font-size="17" font-weight="800" fill="#FFE600">1</text>
+            <text x="210" y="62" text-anchor="middle" font-size="7" fill="#999">GATE</text>
+            <text x="210" y="95" text-anchor="middle" font-size="9" fill="#555">Layouts</text>
+            <!-- Gate 2 -->
+            <circle cx="350" cy="55" r="28" fill="#1A1A2E"/>
+            <text x="350" y="50" text-anchor="middle" font-size="17" font-weight="800" fill="#FFE600">2</text>
+            <text x="350" y="62" text-anchor="middle" font-size="7" fill="#999">GATE</text>
+            <text x="350" y="95" text-anchor="middle" font-size="9" fill="#555">Detalhamento</text>
+            <text x="350" y="107" text-anchor="middle" font-size="9" fill="#555">Técnico</text>
+            <!-- Gate 3 HANDOVER -->
+            <circle cx="490" cy="55" r="32" fill="#FFE600"/>
+            <text x="490" y="49" text-anchor="middle" font-size="17" font-weight="800" fill="#1A1A2E">3</text>
+            <text x="490" y="63" text-anchor="middle" font-size="7" fill="#1A1A2E" font-weight="700">HANDOVER</text>
+            <text x="490" y="99" text-anchor="middle" font-size="9" fill="#555">Compras +</text>
+            <text x="490" y="111" text-anchor="middle" font-size="9" fill="#555">Handover</text>
+            <!-- Gate 4 -->
+            <circle cx="630" cy="55" r="28" fill="#0F3460"/>
+            <text x="630" y="50" text-anchor="middle" font-size="17" font-weight="800" fill="#FFE600">4</text>
+            <text x="630" y="62" text-anchor="middle" font-size="7" fill="#aaa">GATE</text>
+            <text x="630" y="95" text-anchor="middle" font-size="9" fill="#555">Instalação +</text>
+            <text x="630" y="107" text-anchor="middle" font-size="9" fill="#555">Go-Live</text>
+            <!-- Gate 5 -->
+            <circle cx="770" cy="55" r="28" fill="#0F3460"/>
+            <text x="770" y="50" text-anchor="middle" font-size="17" font-weight="800" fill="#FFE600">5</text>
+            <text x="770" y="62" text-anchor="middle" font-size="7" fill="#aaa">GATE</text>
+            <text x="770" y="95" text-anchor="middle" font-size="9" fill="#555">Post-</text>
+            <text x="770" y="107" text-anchor="middle" font-size="9" fill="#555">Mortem</text>
+          </svg>
+        </div>
+        <div class="alert"><strong>Handover no Gate 3</strong>O Especialista CIE atua do Gate 0 ao Gate 3. A partir do Gate 3, o CIE Local assume a responsabilidade da implementação.</div>
+        <div class="table-wrap"><table>
+          <tr><th>Gate</th><th>Entrega principal</th><th>Responsável</th></tr>
+          <tr><td><strong>0</strong></td><td><span class="td-link" onclick="goTo('s2')">Premissas Operacionais (RFP)</span></td><td>Setup</td></tr>
+          <tr><td><strong>1</strong></td><td><span class="td-link" onclick="goTo('s4')">Layouts (Operativo + Admin + Complementar)</span></td><td>CIE Esp. + Eng. Design + Start-up</td></tr>
+          <tr><td><strong>2</strong></td><td><span class="td-link" onclick="goTo('s7')">Especificações técnicas + Calculadoras</span></td><td>CIE Esp. + Eng. Design + Start-up</td></tr>
+          <tr><td><strong>3</strong></td><td><span class="td-link" onclick="goTo('s9')">Book de Compras + Book de Nave + Handover</span></td><td>CIE Esp. → CIE Local</td></tr>
+          <tr><td><strong>4</strong></td><td><span class="td-link" onclick="goTo('s10')">Nave operacional (demarcação + estruturas + equipamentos)</span></td><td>CIE Local</td></tr>
+          <tr><td><strong>5</strong></td><td><span class="td-link" onclick="goTo('s13')">Post-Mortem + Lessons Learned</span></td><td>CIE Local</td></tr>
+        </table></div>
+        <h3>RACI Gate 1 — Layouts</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Atividade</th><th>CIE Esp.</th><th>Eng. Design</th><th>Start-up</th><th>CIE Local</th></tr>
+          <tr><td>Design Layout Operativo</td><td>C</td><td><strong>R</strong></td><td>C</td><td>I</td></tr>
+          <tr><td>Design Layout Admin</td><td>C</td><td><strong>R</strong></td><td>—</td><td>I</td></tr>
+          <tr><td>Design Layout Complementar</td><td>C</td><td>C</td><td><strong>R</strong></td><td>I</td></tr>
+          <tr><td>Validação de fluxos operacionais</td><td><strong>R</strong></td><td>C</td><td><strong>R</strong></td><td>C</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Gates del Proyecto</h2>
+        <p class="subtitle">RACI y Entregables por Gate · Duración total: ~22 meses</p>
+        <div class="gate-grid">
+          <div class="gate-card"><div class="gate-num">0</div><div class="gate-label">Definición de Nave</div></div>
+          <div class="gate-card"><div class="gate-num">1</div><div class="gate-label">Layouts</div></div>
+          <div class="gate-card"><div class="gate-num">2</div><div class="gate-label">Detallamiento Técnico</div></div>
+          <div class="gate-card"><div class="gate-num">3</div><div class="gate-label">Compras + Handover</div></div>
+          <div class="gate-card"><div class="gate-num">4</div><div class="gate-label">Instalación + Go-Live</div></div>
+          <div class="gate-card"><div class="gate-num">5</div><div class="gate-label">Post-Mortem</div></div>
+        </div>
+        <div class="alert"><strong>Handover en Gate 3</strong>El Especialista CIE actúa del Gate 0 al Gate 3. A partir del Gate 3, el CIE Local asume la responsabilidad de la implementación.</div>
+        <div class="table-wrap"><table>
+          <tr><th>Gate</th><th>Entregable principal</th><th>Responsable</th></tr>
+          <tr><td><strong>0</strong></td><td><span class="td-link" onclick="goTo('s2')">Premisas Operacionales (RFP)</span></td><td>Setup</td></tr>
+          <tr><td><strong>1</strong></td><td><span class="td-link" onclick="goTo('s4')">Layouts (Operativo + Admin + Complementario)</span></td><td>CIE Esp. + Eng. Design + Start-up</td></tr>
+          <tr><td><strong>2</strong></td><td><span class="td-link" onclick="goTo('s7')">Especificaciones técnicas + Calculadoras</span></td><td>CIE Esp. + Eng. Design + Start-up</td></tr>
+          <tr><td><strong>3</strong></td><td><span class="td-link" onclick="goTo('s9')">Book de Compras + Book de Nave + Handover</span></td><td>CIE Esp. → CIE Local</td></tr>
+          <tr><td><strong>4</strong></td><td><span class="td-link" onclick="goTo('s10')">Nave operativa (demarcación + estructuras + equipos)</span></td><td>CIE Local</td></tr>
+          <tr><td><strong>5</strong></td><td><span class="td-link" onclick="goTo('s13')">Post-Mortem + Lecciones Aprendidas</span></td><td>CIE Local</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 -->
+    <div class="section" id="s4">
+      <div class="section-badge">04</div>
+      <div class="pt">
+        <h2>Tipos de Nave e Macrolayout</h2>
+        <p class="subtitle">Gate 1 · Engineering Design + Especialista CIE</p>
+        <h3>Tipos de nave</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Tipo</th><th>Característica</th><th>Exemplos</th></tr>
+          <tr><td><strong>Single Dock</strong></td><td>Docas em apenas um lado — IN e OUT pelo mesmo acesso</td><td>SP19, SP15, SP18, SP26</td></tr>
+          <tr><td><strong>Double Dock</strong></td><td>Docas em dois lados opostos — fluxo linear natural</td><td>Sites de alto volume</td></tr>
+        </table></div>
+        <div class="alert"><strong>Big Totable — definir antes do layout</strong>O destino dos produtos Big Totable (TT ou NT) deve ser confirmado no Gate 0. A indefinição nesta etapa gera reconfiguração de estruturas e impacto em picking e recebimento. (Lição aprendida: SP26 — USD 21,4K / 56 dias)</div>
+        <h3>Princípios fundamentais</h3>
+        <h4>1. Fluxo Linear</h4>
+        <div class="flow">INBOUND ──► STORAGE ──► PICKING ──► PACKING ──► SHIPPING</div>
+        <div class="table-wrap"><table>
+          <tr><th>Site</th><th>Problema</th><th>Impacto</th></tr>
+          <tr><td>BRRJ01</td><td>Shipping longe das docas de saída</td><td>Ineficiência estrutural permanente</td></tr>
+          <tr><td>BRBA01</td><td>Packing a 264m do acesso</td><td>23% do HC percorria 5 min por trajeto</td></tr>
+          <tr><td>SP18</td><td>Mono longe do Bloco A (48,4% estoque)</td><td>3min10s vs 1min15s por trajeto · USD 3,4K/ano</td></tr>
+          <tr><td>SP25</td><td>Inbound sem separação de pallets para decanting</td><td>Retrabalho e reposicionamento durante operação</td></tr>
+          <tr><td>SP26</td><td>Fita de demarcação não considerada no dimensionamento</td><td>Espaço de acesso ao decanting reduzido após execução</td></tr>
+          <tr><td>BA02</td><td>Distância HS→Doca de 33m (insuficiente para NT)</td><td>107/160 docas consumidas para decanting · 26 módulos removidos</td></tr>
+        </table></div>
+        <h4>2. Separação TT × NT</h4>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Totable (TT)</th><th>Non-Totable (NT)</th></tr>
+          <tr><td>Docas Inbound</td><td>Separadas</td><td>Separadas</td></tr>
+          <tr><td>Área de Receiving</td><td>Separada</td><td>Separada</td></tr>
+          <tr><td>Distância entre estruturas HS</td><td>—</td><td>1,7m entre proteção / 1,8m entre longarina</td></tr>
+          <tr><td>Processo P2M / MWH</td><td>Lado TT</td><td>Lado NT</td></tr>
+          <tr><td>Expedição MWH</td><td>Docas TT</td><td>Docas NT</td></tr>
+        </table></div>
+        <h4>3. Layout em Três Camadas</h4>
+        <div class="table-wrap"><table>
+          <tr><th>Camada</th><th>O que define</th><th>Quem entrega</th></tr>
+          <tr><td><strong>Operativo</strong></td><td>Macroáreas, docas, fluxos principais</td><td>Engineering Design</td></tr>
+          <tr><td><strong>Administrativo</strong></td><td>Escritórios, banheiros, vestiários</td><td>Engineering Design</td></tr>
+          <tr><td><strong>Complementar</strong></td><td>Ilhas de insumos, buffers, tier, PS, IMA</td><td>Start-up</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Tipos de Nave y Macrolayout</h2>
+        <p class="subtitle">Gate 1 · Engineering Design + Especialista CIE</p>
+        <h3>Tipos de nave</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Tipo</th><th>Característica</th><th>Ejemplos</th></tr>
+          <tr><td><strong>Single Dock</strong></td><td>Muelles en un solo lado — IN y OUT por el mismo acceso</td><td>SP19, SP15, SP18, SP26</td></tr>
+          <tr><td><strong>Double Dock</strong></td><td>Muelles en dos lados opuestos — flujo lineal natural</td><td>Sites de alto volumen</td></tr>
+        </table></div>
+        <div class="alert"><strong>Big Totable — definir antes del layout</strong>El destino de los productos Big Totable (TT o NT) debe confirmarse en el Gate 0. La indefinición genera reconfiguración de estructuras e impacto en picking y recepción. (Lección aprendida: SP26 — USD 21,4K / 56 días)</div>
+        <h3>Principios fundamentales</h3>
+        <h4>1. Flujo Lineal</h4>
+        <div class="flow">INBOUND ──► STORAGE ──► PICKING ──► PACKING ──► SHIPPING</div>
+        <h4>2. Separación TT × NT</h4>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Totable (TT)</th><th>Non-Totable (NT)</th></tr>
+          <tr><td>Muelles Inbound</td><td>Separados</td><td>Separados</td></tr>
+          <tr><td>Área de Recepción</td><td>Separada</td><td>Separada</td></tr>
+          <tr><td>Distancia entre estructuras HS</td><td>—</td><td>1,7m entre protección / 1,8m entre larguero</td></tr>
+          <tr><td>Proceso P2M / MWH</td><td>Lado TT</td><td>Lado NT</td></tr>
+          <tr><td>Expedición MWH</td><td>Muelles TT</td><td>Muelles NT</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 5 -->
+    <div class="section" id="s5">
+      <div class="section-badge">05</div>
+      <div class="pt">
+        <h2>Projeto de Layout Operativo</h2>
+        <p class="subtitle">Gates 1–2 · Engineering Design + Start-up</p>
+        <h3>5.1 Inbound — Medidas técnicas</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Dimensão</th><th>Valor</th><th>Uso</th></tr>
+          <tr><td>Corredor externo (doca)</td><td><strong>280 cm</strong></td><td>Acesso de empilhadeira</td></tr>
+          <tr><td>Corredor interno (MHE)</td><td><strong>270 cm</strong></td><td>Manobra de MHE</td></tr>
+          <tr><td>Corredor interno (palete)</td><td><strong>100–120 cm</strong></td><td>Passagem entre pallets</td></tr>
+          <tr><td>Espaçamento entre pallets (decanting)</td><td><strong>40 cm</strong></td><td>Acesso do rep para bipar totes</td></tr>
+          <tr><td>Largura da fita de demarcação</td><td><strong>5 cm</strong></td><td>Descontar do espaço projetado</td></tr>
+          <tr><td>Distância mínima HS → Doca (NT)</td><td><strong>38 m</strong></td><td>Stage (10m) + operação + decanting (15m)</td></tr>
+        </table></div>
+        <div class="alert red"><strong>Atenção — BA02</strong>O layout original previa 33m (sem área de decanting). A correção exigiu remoção de 26 módulos de HS antes do go-live. Custo: USD 18K.</div>
+        <!-- DIAGRAM: Inbound Dimensions -->
+        <div style="margin:20px 0;background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:16px">
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="pt">▲ Vista superior — Área de Inbound com medidas técnicas</p>
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="es">▲ Vista superior — Área de Inbound con medidas técnicas</p>
+          <svg width="100%" viewBox="0 0 760 320" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Segoe UI',sans-serif">
+            <!-- External road -->
+            <rect x="0" y="0" width="760" height="40" fill="#d0d0d0" rx="0"/>
+            <text x="380" y="25" text-anchor="middle" font-size="11" fill="#888" font-weight="700" class="pt">PÁTIO EXTERNO</text>
+            <text x="380" y="25" text-anchor="middle" font-size="11" fill="#888" font-weight="700" class="es">PATIO EXTERNO</text>
+            <!-- 4 Docks -->
+            <rect x="50" y="40" width="80" height="35" fill="#1A1A2E" rx="2"/><text x="90" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="pt">DOCA</text><text x="90" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="es">MUELLE</text>
+            <rect x="220" y="40" width="80" height="35" fill="#1A1A2E" rx="2"/><text x="260" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="pt">DOCA</text><text x="260" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="es">MUELLE</text>
+            <rect x="400" y="40" width="80" height="35" fill="#1A1A2E" rx="2"/><text x="440" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="pt">DOCA</text><text x="440" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="es">MUELLE</text>
+            <rect x="570" y="40" width="80" height="35" fill="#1A1A2E" rx="2"/><text x="610" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="pt">DOCA</text><text x="610" y="62" text-anchor="middle" font-size="9" fill="#FFE600" font-weight="700" class="es">MUELLE</text>
+            <!-- 280cm External corridor -->
+            <rect x="10" y="75" width="740" height="42" fill="rgba(255,230,0,0.12)" stroke="#FFE600" stroke-width="1.5" stroke-dasharray="5,3" rx="2"/>
+            <line x1="10" y1="62" x2="10" y2="75" stroke="#FFE600" stroke-width="1"/><line x1="750" y1="62" x2="750" y2="75" stroke="#FFE600" stroke-width="1"/>
+            <text x="380" y="101" text-anchor="middle" font-size="11" fill="#997700" font-weight="800">↔ 280 cm — Corredor Externo MHE</text>
+            <!-- 270cm Internal MHE corridor -->
+            <rect x="10" y="117" width="740" height="42" fill="rgba(26,26,46,0.06)" stroke="#1A1A2E" stroke-width="1.5" stroke-dasharray="5,3" rx="2"/>
+            <text x="380" y="143" text-anchor="middle" font-size="11" fill="#1A1A2E" font-weight="800">↔ 270 cm — Corredor Interno MHE</text>
+            <!-- Pallets row with 40cm spacing -->
+            <rect x="30" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <text x="65" y="186" text-anchor="middle" font-size="8" fill="#5a3f00" font-weight="700" class="pt">PALETE</text>
+            <text x="65" y="186" text-anchor="middle" font-size="8" fill="#5a3f00" font-weight="700" class="es">PALLET</text>
+            <!-- 40cm gap (decanting) -->
+            <rect x="100" y="162" width="40" height="38" fill="rgba(229,57,53,0.12)" stroke="#e53935" stroke-width="1.5" stroke-dasharray="3,2" rx="1"/>
+            <text x="120" y="178" text-anchor="middle" font-size="9" fill="#e53935" font-weight="800">40cm</text>
+            <text x="120" y="192" text-anchor="middle" font-size="8" fill="#e53935">decanting</text>
+            <rect x="140" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <!-- 5cm tape -->
+            <rect x="210" y="162" width="8" height="38" fill="#FFE600" opacity="0.9"/>
+            <text x="248" y="174" text-anchor="middle" font-size="8" fill="#997700" font-weight="700">5cm</text>
+            <text x="248" y="185" text-anchor="middle" font-size="7" fill="#997700">fita</text>
+            <rect x="218" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <!-- 100-120cm internal pallet corridor -->
+            <rect x="288" y="162" width="110" height="38" fill="rgba(0,102,204,0.08)" stroke="#0066cc" stroke-width="1.5" stroke-dasharray="3,2" rx="1"/>
+            <text x="343" y="178" text-anchor="middle" font-size="9" fill="#0066cc" font-weight="800">100–120cm</text>
+            <text x="343" y="191" text-anchor="middle" font-size="7" fill="#0066cc" class="pt">corr. paletes</text>
+            <text x="343" y="191" text-anchor="middle" font-size="7" fill="#0066cc" class="es">corr. pallets</text>
+            <rect x="398" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <rect x="475" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <rect x="560" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <rect x="645" y="162" width="70" height="38" fill="#c8a96e" stroke="#8b6914" stroke-width="1.5" rx="3"/>
+            <!-- Interior -->
+            <rect x="10" y="205" width="740" height="100" fill="#eef2ff" stroke="#ddd" stroke-width="1" rx="2"/>
+            <text x="380" y="250" text-anchor="middle" font-size="13" fill="#bbb" font-weight="700" class="pt">INTERIOR DA NAVE</text>
+            <text x="380" y="250" text-anchor="middle" font-size="13" fill="#bbb" font-weight="700" class="es">INTERIOR DE LA NAVE</text>
+            <text x="380" y="270" text-anchor="middle" font-size="10" fill="#ccc" class="pt">Stage DCI · Buffers · Armazenamento</text>
+            <text x="380" y="270" text-anchor="middle" font-size="10" fill="#ccc" class="es">Stage DCI · Buffers · Almacenamiento</text>
+          </svg>
+        </div>
+        <h3>5.2 Storage — Passilhos</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Medida</th></tr>
+          <tr><td>Passilho entre racks TT</td><td><strong>1,3 m</strong></td></tr>
+          <tr><td>Passilho entre racks NT (entre proteção)</td><td><strong>1,7 m</strong></td></tr>
+          <tr><td>Passilho entre racks NT (entre longarina)</td><td><strong>1,8 m</strong></td></tr>
+          <tr><td>Corredor central</td><td><strong>6–8 m</strong></td></tr>
+        </table></div>
+        <!-- DIAGRAM: Rack Passillo TT vs NT -->
+        <div style="margin:20px 0;background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:16px">
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="pt">▲ Comparativo de passilhos — Totable vs Non-Totable</p>
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="es">▲ Comparativo de pasillos — Totable vs Non-Totable</p>
+          <svg width="100%" viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Segoe UI',sans-serif">
+            <!-- Labels -->
+            <text x="190" y="18" text-anchor="middle" font-size="13" font-weight="800" fill="#1A1A2E">TOTABLE (TT)</text>
+            <text x="570" y="18" text-anchor="middle" font-size="13" font-weight="800" fill="#1A1A2E">NON-TOTABLE (NT)</text>
+            <line x1="380" y1="0" x2="380" y2="230" stroke="#eee" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <!-- TT Racks -->
+            <rect x="20" y="35" width="35" height="150" fill="#1A1A2E" rx="3"/>
+            <text x="37" y="115" text-anchor="middle" font-size="8" fill="#aaa" transform="rotate(-90,37,115)" class="pt">RACK</text>
+            <text x="37" y="115" text-anchor="middle" font-size="8" fill="#aaa" transform="rotate(-90,37,115)" class="es">RACK</text>
+            <rect x="325" y="35" width="35" height="150" fill="#1A1A2E" rx="3"/>
+            <!-- TT Passillo 1.3m -->
+            <rect x="55" y="45" width="270" height="130" fill="rgba(255,230,0,0.1)" stroke="#FFE600" stroke-width="2" rx="2"/>
+            <line x1="55" y1="28" x2="325" y2="28" stroke="#FFE600" stroke-width="2"/>
+            <polygon points="55,24 55,32 47,28" fill="#FFE600"/><polygon points="325,24 325,32 333,28" fill="#FFE600"/>
+            <text x="190" y="25" text-anchor="middle" font-size="12" fill="#997700" font-weight="800">1,3 m</text>
+            <!-- TT MHE -->
+            <rect x="120" y="85" width="140" height="50" fill="#0066cc" rx="5"/>
+            <text x="190" y="107" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">MHE Stacker</text>
+            <text x="190" y="123" text-anchor="middle" font-size="9" fill="#cce5ff">Totable</text>
+            <text x="190" y="200" text-anchor="middle" font-size="10" fill="#777" class="pt">Passilho operacional: 1,3 m</text>
+            <text x="190" y="200" text-anchor="middle" font-size="10" fill="#777" class="es">Pasillo operativo: 1,3 m</text>
+            <!-- NT Racks -->
+            <rect x="400" y="35" width="35" height="150" fill="#1A1A2E" rx="3"/>
+            <rect x="435" y="45" width="10" height="130" fill="#e53935" rx="2" opacity="0.75"/>
+            <rect x="715" y="35" width="35" height="150" fill="#1A1A2E" rx="3"/>
+            <rect x="705" y="45" width="10" height="130" fill="#e53935" rx="2" opacity="0.75"/>
+            <!-- NT Passillo between longarina (1.8m) -->
+            <line x1="400" y1="28" x2="750" y2="28" stroke="#1A1A2E" stroke-width="2"/>
+            <polygon points="400,24 400,32 392,28" fill="#1A1A2E"/><polygon points="750,24 750,32 758,28" fill="#1A1A2E"/>
+            <text x="575" y="25" text-anchor="middle" font-size="11" fill="#1A1A2E" font-weight="800">1,8 m (longarina)</text>
+            <!-- NT Passillo between protection (1.7m) -->
+            <line x1="445" y1="200" x2="705" y2="200" stroke="#e53935" stroke-width="2"/>
+            <polygon points="445,196 445,204 437,200" fill="#e53935"/><polygon points="705,196 705,204 713,200" fill="#e53935"/>
+            <text x="575" y="214" text-anchor="middle" font-size="11" fill="#e53935" font-weight="800">1,7 m (proteção)</text>
+            <!-- NT Area fill -->
+            <rect x="445" y="45" width="260" height="130" fill="rgba(229,57,53,0.06)" stroke="#e53935" stroke-width="1.5" rx="2" stroke-dasharray="5,3"/>
+            <!-- NT MHE Order Picker + Jaula -->
+            <rect x="490" y="75" width="170" height="70" fill="#0F3460" rx="5"/>
+            <text x="575" y="100" text-anchor="middle" font-size="11" fill="#fff" font-weight="700">Order Picker NT</text>
+            <text x="575" y="116" text-anchor="middle" font-size="9" fill="#cce5ff">+ Jaula 2.0</text>
+            <text x="575" y="132" text-anchor="middle" font-size="9" fill="#FFE600">1.650×1.300×1.300mm</text>
+            <!-- Legend -->
+            <rect x="420" y="218" width="10" height="8" fill="#e53935" rx="1" opacity="0.75"/>
+            <text x="434" y="226" font-size="8" fill="#888" class="pt">Proteção lateral</text>
+            <text x="434" y="226" font-size="8" fill="#888" class="es">Protección lateral</text>
+          </svg>
+        </div>
+        <h3>5.3 Docas Outbound — referência SC02</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Tipo</th><th>Qtd</th><th>Capacidade</th></tr>
+          <tr><td>Shipping</td><td>30</td><td>1.170 posições</td></tr>
+          <tr><td>Expedição MWH TT</td><td>7</td><td>273 posições</td></tr>
+          <tr><td>Expedição MWH NT</td><td>3 + buffer</td><td>234 posições</td></tr>
+          <tr><td>Retiros e Returns</td><td>2–3</td><td>78 posições</td></tr>
+          <tr><td>Reversa de Totes</td><td>3</td><td>117 posições</td></tr>
+        </table></div>
+        <h3>5.4 Cheapest Shipment — Fluxo</h3>
+        <div class="flow">Picking → Packing (etiqueta CHP) → Sorting Manual → Armado de Sacas → Stage Out em piso → Shipping (não-prioritário)</div>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro</th><th>Critério (atualizado 23/04/2026)</th></tr>
+          <tr><td>Preço (ASP)</td><td>&lt; R$29–79</td></tr>
+          <tr><td>Peso máximo</td><td>&lt; 2,5 kg</td></tr>
+          <tr><td>Dimensão máxima</td><td>&lt; 50 cm</td></tr>
+          <tr><td>Soma dos lados</td><td>&lt; 85 cm</td></tr>
+          <tr><td>Categorias</td><td>Beleza, Moda, Artigos de Casa</td></tr>
+        </table></div>
+        <div class="alert"><strong>Sorters — ponto de atenção</strong>A ampliação da dimensão máxima de 40→50 cm exige validação de compatibilidade dos sorters instalados e planejados. Validar no Gate 2.</div>
+        <h3>5.5 Áreas de Apoio</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Área</th><th>Posicionamento</th></tr>
+          <tr><td>Returns / Retiros</td><td>Adjacente às docas de retiros</td></tr>
+          <tr><td>IMA</td><td>Próxima ao Inbound, fluxo segregado</td></tr>
+          <tr><td>PS por processo</td><td>Inbound, P2M, Packing — uma por processo crítico</td></tr>
+          <tr><td>Guardado Cruzado</td><td>Área TT dedicada (referência: 0,5% da capacidade estática)</td></tr>
+          <tr><td>Buffer carrinhos Cheapest</td><td>Adjacente às bancadas de Packing</td></tr>
+          <tr><td>Stage Out — Sacas Cheapest</td><td>Próximo ao Shipping, sem interferir no fluxo de HUs normais</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Proyecto de Layout Operativo</h2>
+        <p class="subtitle">Gates 1–2 · Engineering Design + Start-up</p>
+        <h3>5.1 Inbound — Medidas técnicas</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Dimensión</th><th>Valor</th><th>Uso</th></tr>
+          <tr><td>Pasillo externo (muelle)</td><td><strong>280 cm</strong></td><td>Acceso de apiladora</td></tr>
+          <tr><td>Pasillo interno (MHE)</td><td><strong>270 cm</strong></td><td>Maniobra de MHE</td></tr>
+          <tr><td>Pasillo interno (pallet)</td><td><strong>100–120 cm</strong></td><td>Paso entre pallets</td></tr>
+          <tr><td>Espaciado entre pallets (decanting)</td><td><strong>40 cm</strong></td><td>Acceso del rep para bipar totes</td></tr>
+          <tr><td>Ancho de cinta de demarcación</td><td><strong>5 cm</strong></td><td>Descontar del espacio proyectado</td></tr>
+          <tr><td>Distancia mínima HS → Muelle (NT)</td><td><strong>38 m</strong></td><td>Stage (10m) + operación + decanting (15m)</td></tr>
+        </table></div>
+        <h3>5.2 Storage — Pasillos</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Medida</th></tr>
+          <tr><td>Pasillo entre racks TT</td><td><strong>1,3 m</strong></td></tr>
+          <tr><td>Pasillo entre racks NT (entre protección)</td><td><strong>1,7 m</strong></td></tr>
+          <tr><td>Pasillo entre racks NT (entre larguero)</td><td><strong>1,8 m</strong></td></tr>
+          <tr><td>Corredor central</td><td><strong>6–8 m</strong></td></tr>
+        </table></div>
+        <h3>5.3 Cheapest Shipment — Criterios (actualizado 23/04/2026)</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parámetro</th><th>Criterio vigente</th></tr>
+          <tr><td>Precio (ASP)</td><td>&lt; R$29–79</td></tr>
+          <tr><td>Peso máximo</td><td>&lt; 2,5 kg</td></tr>
+          <tr><td>Dimensión máxima</td><td>&lt; 50 cm</td></tr>
+          <tr><td>Suma de lados</td><td>&lt; 85 cm</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 6 -->
+    <div class="section" id="s6">
+      <div class="section-badge">06</div>
+      <div class="pt">
+        <h2>Layout Complementar</h2>
+        <p class="subtitle">Gate 1 · Start-up</p>
+        <div class="alert red"><strong>Entrega crítica frequentemente negligenciada</strong>A ausência do layout complementar no Gate 1 é uma das principais causas de retrabalho no Gate 4. Exija as três camadas de layout juntas.</div>
+        <h3>Áreas obrigatórias</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Área</th><th>Função</th><th>Posicionamento</th></tr>
+          <tr><td>Ilhas de insumos</td><td>Abastecimento por processo</td><td>Dentro do raio de alcance do processo</td></tr>
+          <tr><td>Buffers de carrinhos</td><td>Estoque de carrinhos entre turnos</td><td>Adjacente ao processo — mín. 30 carrinhos</td></tr>
+          <tr><td>Área de Tier</td><td>Reuniões de início de turno</td><td>Visibilidade direta da área operacional</td></tr>
+          <tr><td>PS por processo</td><td>Tratativa de exceções</td><td>Inbound, P2M, Packing</td></tr>
+          <tr><td>Stage DCI</td><td>DCI aguardando Put Away</td><td>Próximo ao Inbound — sem ocupar doca</td></tr>
+          <tr><td>Stage Out (WT)</td><td>Rastreio de HUs entre processos</td><td>Entre RC in FC, MWH e Shipping</td></tr>
+          <tr><td>Área carrinhos NT</td><td>Organização de carrinhos NT</td><td>Adjacente ao receiving NT</td></tr>
+          <tr><td>Área de sorting Cheapest</td><td>Separação visual CHP vs Normal</td><td>Adjacente às bancadas de Packing</td></tr>
+        </table></div>
+        <h3>Checklist — Layout Complementar</h3>
+        <ul class="checklist">
+          <li>Ilhas de insumos posicionadas por processo</li>
+          <li>Buffers de carrinhos dimensionados (mínimo 30 por buffer)</li>
+          <li>Áreas de Tier com visibilidade da operação</li>
+          <li>Stage DCI dedicado (fora das docas de Inbound)</li>
+          <li>Stage Out (WT) para rastreio de HUs em RC in FC e MWH</li>
+          <li>Área de sorting Cheapest e Stage Out para sacas demarcados</li>
+          <li>Layout complementar aprovado por Start-up e Operações</li>
+        </ul>
+      </div>
+      <div class="es">
+        <h2>Layout Complementario</h2>
+        <p class="subtitle">Gate 1 · Start-up</p>
+        <div class="alert red"><strong>Entregable crítico frecuentemente negligenciado</strong>La ausencia del layout complementario en el Gate 1 es una de las principales causas de retrabajo en el Gate 4. Exija las tres capas de layout juntas.</div>
+        <h3>Áreas obligatorias</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Área</th><th>Función</th><th>Posicionamiento</th></tr>
+          <tr><td>Islas de insumos</td><td>Abastecimiento por proceso</td><td>Dentro del radio de alcance del proceso</td></tr>
+          <tr><td>Buffers de carros</td><td>Stock de carros entre turnos</td><td>Adyacente al proceso — mín. 30 carros</td></tr>
+          <tr><td>Área de Tier</td><td>Reuniones de inicio de turno</td><td>Visibilidad directa del área operativa</td></tr>
+          <tr><td>PS por proceso</td><td>Tratamiento de excepciones</td><td>Inbound, P2M, Packing</td></tr>
+          <tr><td>Stage DCI</td><td>DCI esperando Put Away</td><td>Cerca del Inbound — sin ocupar muelle</td></tr>
+          <tr><td>Stage Out (WT)</td><td>Trazabilidad de HUs entre procesos</td><td>Entre RC in FC, MWH y Shipping</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 7 -->
+    <div class="section" id="s7">
+      <div class="section-badge">07</div>
+      <div class="pt">
+        <h2>Demarcação de Piso</h2>
+        <p class="subtitle">Gate 4 · CIE Local + Engenharia de Planta</p>
+        <div class="alert"><strong>Primeira etapa física da implantação</strong>A demarcação precede a instalação de estruturas e equipamentos. Execute-a na sequência correta para evitar retrabalho.</div>
+        <h3>Medidas técnicas</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Medida</th><th>Aplicação</th></tr>
+          <tr><td>Largura da fita de demarcação</td><td><strong>5 cm</strong></td><td>Padrão em todas as áreas</td></tr>
+          <tr><td>Espaçamento entre pallets (decanting)</td><td><strong>40 cm</strong></td><td>Acesso do rep para bipar totes</td></tr>
+          <tr><td>Corredor interno — carrinhos de PA</td><td><strong>60–61 cm</strong></td><td>Buffer de carrinhos por posição</td></tr>
+          <tr><td>Corredor interno — palete</td><td><strong>100–120 cm</strong></td><td>Passagem entre pallets no Inbound</td></tr>
+          <tr><td>Corredor interno — MHE</td><td><strong>270 cm</strong></td><td>Manobra de empilhadeira</td></tr>
+          <tr><td>Corredor externo — MHE</td><td><strong>280 cm</strong></td><td>Acesso externo à doca</td></tr>
+          <tr><td>Corredor central de racks</td><td><strong>6–8 m</strong></td><td>Circulação de MHE e jaulas</td></tr>
+          <tr><td>Buffer mínimo de carrinhos por área</td><td><strong>30 unidades</strong></td><td>Por ponto de buffer</td></tr>
+        </table></div>
+        <h3>Sinalização de segurança MHE</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Distância</th><th>Função</th></tr>
+          <tr><td>Blue Spot</td><td>4 m antes do cruzamento</td><td>Alerta visual de aproximação de MHE</td></tr>
+          <tr><td>Red Light</td><td>1,5 m antes do cruzamento</td><td>Parada obrigatória antes de cruzar corredor</td></tr>
+          <tr><td>Bolardo de cabeceira</td><td>500 mm do corredor</td><td>Proteção extintor + guia de raio de giro</td></tr>
+          <tr><td>Início do carril de circulação</td><td>1 m da cabeceira</td><td>Espaço de 1m² exigido por NR para saída/entrada segura</td></tr>
+          <tr><td>Velocidade máxima MHE</td><td>5 km/h</td><td>Sinalizado em piso e estrutura</td></tr>
+        </table></div>
+        <h3>Referência MHE — Espaço necessário no corredor central</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro (JH EKS 310/412)</th><th>Valor</th></tr>
+          <tr><td>Largura do MHE</td><td>1,5 m</td></tr>
+          <tr><td>Comprimento com jaula</td><td>3,6 m</td></tr>
+          <tr><td>Raio de giro</td><td>3,6 m</td></tr>
+          <tr><td>Distância de segurança ao bolardo</td><td>1,0 m</td></tr>
+          <tr><td><strong>Espaço total mínimo necessário</strong></td><td><strong>5,5–6,0 m</strong></td></tr>
+        </table></div>
+        <!-- DIAGRAM: MHE Safety Corridor -->
+        <div style="margin:20px 0;background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:16px">
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="pt">▲ Vista superior — Sinalização de segurança no corredor de MHE</p>
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="es">▲ Vista superior — Señalización de seguridad en corredor de MHE</p>
+          <svg width="100%" viewBox="0 0 800 260" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Segoe UI',sans-serif">
+            <!-- Rack left -->
+            <rect x="0" y="60" width="35" height="140" fill="#1A1A2E" rx="2"/>
+            <text x="17" y="135" text-anchor="middle" font-size="8" fill="#aaa" transform="rotate(-90,17,135)" class="pt">RACK</text>
+            <text x="17" y="135" text-anchor="middle" font-size="8" fill="#aaa" transform="rotate(-90,17,135)" class="es">RACK</text>
+            <!-- Rack right -->
+            <rect x="765" y="60" width="35" height="140" fill="#1A1A2E" rx="2"/>
+            <!-- Corridor floor -->
+            <rect x="35" y="60" width="730" height="140" fill="#f8f8f8" stroke="#e0e0e0" stroke-width="1"/>
+            <!-- Pedestrian lane -->
+            <rect x="35" y="175" width="730" height="25" fill="rgba(67,160,71,0.1)" stroke="#43a047" stroke-width="1" stroke-dasharray="8,4"/>
+            <text x="400" y="191" text-anchor="middle" font-size="8" fill="#43a047" font-weight="600" class="pt">FAIXA PEDESTRE</text>
+            <text x="400" y="191" text-anchor="middle" font-size="8" fill="#43a047" font-weight="600" class="es">CARRIL PEATONAL</text>
+            <!-- MHE Vehicle -->
+            <rect x="45" y="85" width="130" height="75" fill="#0066cc" rx="6"/>
+            <text x="110" y="118" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">MHE</text>
+            <text x="110" y="135" text-anchor="middle" font-size="9" fill="#cce5ff">→ 5 km/h</text>
+            <polygon points="180,122 198,112 198,132" fill="#0066cc"/>
+            <!-- Cross corridor (grey zone) -->
+            <rect x="700" y="0" width="65" height="260" fill="rgba(150,150,150,0.12)" stroke="#aaa" stroke-width="1" stroke-dasharray="5,3"/>
+            <text x="732" y="35" text-anchor="middle" font-size="8" fill="#aaa" class="pt">Cruzamento</text>
+            <text x="732" y="47" text-anchor="middle" font-size="8" fill="#aaa" class="es">Cruce</text>
+            <!-- Bolardo at 500mm -->
+            <circle cx="300" cy="130" r="14" fill="#FF8F00"/>
+            <text x="300" y="135" text-anchor="middle" font-size="11" fill="#fff" font-weight="800">B</text>
+            <line x1="300" y1="144" x2="300" y2="215" stroke="#FF8F00" stroke-width="1" stroke-dasharray="3,2"/>
+            <text x="300" y="227" text-anchor="middle" font-size="9" fill="#FF8F00" font-weight="700" class="pt">Bolardo</text>
+            <text x="300" y="227" text-anchor="middle" font-size="9" fill="#FF8F00" font-weight="700" class="es">Bolardo</text>
+            <text x="300" y="239" text-anchor="middle" font-size="8" fill="#FF8F00">500 mm</text>
+            <!-- Red Light at 1.5m from bolardo -->
+            <line x1="450" y1="55" x2="450" y2="210" stroke="#e53935" stroke-width="2" stroke-dasharray="6,3"/>
+            <circle cx="450" cy="44" r="16" fill="#e53935"/>
+            <text x="450" y="50" text-anchor="middle" font-size="14" fill="#fff">●</text>
+            <text x="450" y="222" text-anchor="middle" font-size="9" fill="#e53935" font-weight="700">Red Light</text>
+            <text x="450" y="234" text-anchor="middle" font-size="8" fill="#e53935">1,5 m</text>
+            <!-- 1.5m annotation -->
+            <line x1="300" y1="155" x2="450" y2="155" stroke="#e53935" stroke-width="1.5"/>
+            <polygon points="300,151 300,159 292,155" fill="#e53935"/><polygon points="450,151 450,159 458,155" fill="#e53935"/>
+            <text x="375" y="152" text-anchor="middle" font-size="9" fill="#e53935" font-weight="700">1,5 m</text>
+            <!-- Blue Spot at 4m from bolardo -->
+            <line x1="640" y1="55" x2="640" y2="210" stroke="#1976d2" stroke-width="2" stroke-dasharray="6,3"/>
+            <circle cx="640" cy="44" r="16" fill="#1976d2"/>
+            <text x="640" y="50" text-anchor="middle" font-size="14" fill="#fff">●</text>
+            <text x="640" y="222" text-anchor="middle" font-size="9" fill="#1976d2" font-weight="700">Blue Spot</text>
+            <text x="640" y="234" text-anchor="middle" font-size="8" fill="#1976d2">4 m</text>
+            <!-- 4m annotation -->
+            <line x1="300" y1="170" x2="640" y2="170" stroke="#1976d2" stroke-width="1.5"/>
+            <polygon points="300,166 300,174 292,170" fill="#1976d2"/><polygon points="640,166 640,174 648,170" fill="#1976d2"/>
+            <text x="470" y="167" text-anchor="middle" font-size="9" fill="#1976d2" font-weight="700">4 m</text>
+            <!-- Speed sign -->
+            <circle cx="690" cy="110" r="22" fill="#fff" stroke="#e53935" stroke-width="3"/>
+            <text x="690" y="105" text-anchor="middle" font-size="12" fill="#e53935" font-weight="800">5</text>
+            <text x="690" y="119" text-anchor="middle" font-size="7" fill="#e53935">km/h</text>
+          </svg>
+        </div>
+        <h3>Sequência de execução</h3>
+        <div class="flow">1. Macrozoneamento ↓ 2. Corredores MHE ↓ 3. Áreas de Inbound ↓ 4. Buffers ↓ 5. Áreas de processamento ↓ 6. Áreas complementares ↓ 7. Sinalização de segurança ↓ 8. Identificações e placas</div>
+      </div>
+      <div class="es">
+        <h2>Demarcación de Piso</h2>
+        <p class="subtitle">Gate 4 · CIE Local + Ingeniería de Planta</p>
+        <h3>Medidas técnicas</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Medida</th><th>Aplicación</th></tr>
+          <tr><td>Ancho de cinta de demarcación</td><td><strong>5 cm</strong></td><td>Estándar en todas las áreas</td></tr>
+          <tr><td>Espaciado entre pallets (decanting)</td><td><strong>40 cm</strong></td><td>Acceso del rep para bipar totes</td></tr>
+          <tr><td>Pasillo interno — carros de PA</td><td><strong>60–61 cm</strong></td><td>Buffer de carros por posición</td></tr>
+          <tr><td>Pasillo interno — MHE</td><td><strong>270 cm</strong></td><td>Maniobra de apiladora</td></tr>
+          <tr><td>Pasillo externo — MHE</td><td><strong>280 cm</strong></td><td>Acceso externo al muelle</td></tr>
+          <tr><td>Corredor central de racks</td><td><strong>6–8 m</strong></td><td>Circulación de MHE y jaulas</td></tr>
+        </table></div>
+        <h3>Señalización de seguridad MHE</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Elemento</th><th>Distancia</th><th>Función</th></tr>
+          <tr><td>Blue Spot</td><td>4 m antes del cruce</td><td>Alerta visual de aproximación de MHE</td></tr>
+          <tr><td>Red Light</td><td>1,5 m antes del cruce</td><td>Parada obligatoria antes de cruzar corredor</td></tr>
+          <tr><td>Bolardo de cabecera</td><td>500 mm del corredor</td><td>Protección extintor + guía de radio de giro</td></tr>
+          <tr><td>Velocidad máxima MHE</td><td>5 km/h</td><td>Señalizado en piso y estructura</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 8 -->
+    <div class="section" id="s8">
+      <div class="section-badge">08</div>
+      <div class="pt">
+        <h2>Estruturas de Armazenamento</h2>
+        <p class="subtitle">Gates 2–3 · Engineering Design + MTM + CIE Local</p>
+        <h3>Rack (RK) — Critérios de seleção</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Profundidade</th><th>Binfullness alvo</th><th>Perfil indicado</th></tr>
+          <tr><td>70 cm</td><td>43% (inicial)</td><td>Itens pequenos, alto giro</td></tr>
+          <tr><td>100 cm</td><td>50–55%</td><td>Perfil misto padrão</td></tr>
+          <tr><td>106 cm</td><td>50–55%</td><td>Volume/SI de 35L (padrão NT atual)</td></tr>
+        </table></div>
+        <h3>Flowrack</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro</th><th>Especificação</th></tr>
+          <tr><td>Tipo de rolete</td><td>Reforçado — suporta peso de totes carregados</td></tr>
+          <tr><td>Comprimento padrão</td><td>20 m (anterior: 15m — +33% capacidade)</td></tr>
+          <tr><td>Capacidade de bancadas</td><td>Até 4 por flowrack de 20m</td></tr>
+        </table></div>
+        <h3>Jaula Order Picker 2.0 — Padrão NT (2026)</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro</th><th>Valor</th></tr>
+          <tr><td>Altura × Largura × Comprimento</td><td>1.650 × 1.300 × 1.300 mm</td></tr>
+          <tr><td>Litragem</td><td>2.083 L</td></tr>
+          <tr><td>Produtividade média</td><td>60 SIs/h · <strong>+11% vs jaula anterior</strong></td></tr>
+          <tr><td>MHE compatível (JH)</td><td>EKS 412s, 314s, 414s, 420</td></tr>
+          <tr><td>MHE compatível (Raymond)</td><td>5500, 5600</td></tr>
+        </table></div>
+        <h3>Elevador de Paletes — Quando aplicar</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Critério</th><th>Referência</th></tr>
+          <tr><td>Saving estimado</td><td>USD 40K (benchmark SP04)</td></tr>
+          <tr><td>Disponibilidade</td><td>97%</td></tr>
+          <tr><td>Norma de segurança</td><td>NR-12 (obrigatório)</td></tr>
+          <tr><td>Throughput (térreo ↔ 1º andar)</td><td>379 pallets/h</td></tr>
+          <tr><td>Throughput (térreo ↔ 2º andar)</td><td>277 pallets/h</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Estructuras de Almacenamiento</h2>
+        <p class="subtitle">Gates 2–3 · Engineering Design + MTM + CIE Local</p>
+        <h3>Rack (RK) — Criterios de selección</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Profundidad</th><th>Binfullness objetivo</th><th>Perfil indicado</th></tr>
+          <tr><td>70 cm</td><td>43% (inicial)</td><td>Ítems pequeños, alta rotación</td></tr>
+          <tr><td>100 cm</td><td>50–55%</td><td>Perfil mixto estándar</td></tr>
+          <tr><td>106 cm</td><td>50–55%</td><td>Volumen/SI de 35L (estándar NT actual)</td></tr>
+        </table></div>
+        <h3>Jaula Order Picker 2.0 — Estándar NT (2026)</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parámetro</th><th>Valor</th></tr>
+          <tr><td>Alto × Ancho × Largo</td><td>1.650 × 1.300 × 1.300 mm</td></tr>
+          <tr><td>Litrajе</td><td>2.083 L</td></tr>
+          <tr><td>Productividad media</td><td>60 SIs/h · <strong>+11% vs jaula anterior</strong></td></tr>
+          <tr><td>MHE compatible (JH)</td><td>EKS 412s, 314s, 414s, 420</td></tr>
+          <tr><td>MHE compatible (Raymond)</td><td>5500, 5600</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 9 -->
+    <div class="section" id="s9">
+      <div class="section-badge">09</div>
+      <div class="pt">
+        <h2>Equipamentos e Instalação</h2>
+        <p class="subtitle">Gates 3–4 · MTM + Compras + CIE Local + Engenharia de Planta</p>
+        <div class="alert"><strong>Regra</strong>Nenhum equipamento deve ser comprado fora do alinhamento com o layout do Gate 2. A decisão sobre tipo de MHE deve ocorrer no Gate 2, não no Gate 3.</div>
+        <h3>MHE — Equipamentos e ganhos validados</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Equipamento</th><th>Aplicação</th><th>Ganho</th></tr>
+          <tr><td>Empilhadeira</td><td>Inbound — movimentação de paletes</td><td>4–5 un. para pico (ref. SP04)</td></tr>
+          <tr><td>Rebocador</td><td>Transporte de gaiolas entre áreas</td><td>1:8 rep:gaiola · <span class="saving">USD 50K</span></td></tr>
+          <tr><td>Order Picker</td><td>Picking/Put Away racks NT</td><td>Compatível com Jaula 2.0</td></tr>
+          <tr><td>Carro de picking 2 totes</td><td>Picking TT</td><td>+10% produtividade</td></tr>
+          <tr><td>Gaiola 2 níveis</td><td>Picking NT</td><td>+36% produtividade</td></tr>
+        </table></div>
+        <h3>Dispositivos</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Equipamento</th><th>Ganho validado</th></tr>
+          <tr><td>Ring Scanner</td><td>+9% Check-in · +11% Picking <span class="saving">USD 176K</span></td></tr>
+          <tr><td>Conveyor NT</td><td>+15% Net Put Away <span class="saving">USD 240K</span></td></tr>
+          <tr><td>RTD / Handheld</td><td>Especificados no Book de Compras por site</td></tr>
+        </table></div>
+        <h3>Sequência de instalação</h3>
+        <div class="flow">1. Conferir recebimento vs Book de Compras ↓ 2. Consultar layout para posicionamento ↓ 3. Instalar equipamentos fixos (bancadas, conveyors) ↓ 4. Posicionar MHE + estações de carga ↓ 5. Distribuir dispositivos por posto de trabalho ↓ 6. Validar fluxo com Operações ↓ 7. Registrar layout final no Book de Nave</div>
+      </div>
+      <div class="es">
+        <h2>Equipos e Instalación</h2>
+        <p class="subtitle">Gates 3–4 · MTM + Compras + CIE Local + Ingeniería de Planta</p>
+        <div class="alert"><strong>Regla</strong>Ningún equipo debe comprarse sin alineación con el layout del Gate 2. La decisión sobre el tipo de MHE debe ocurrir en el Gate 2, no en el Gate 3.</div>
+        <h3>MHE — Equipos y ganancias validadas</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Equipo</th><th>Aplicación</th><th>Ganancia</th></tr>
+          <tr><td>Apiladora</td><td>Inbound — movimiento de pallets</td><td>4–5 un. para pico (ref. SP04)</td></tr>
+          <tr><td>Remolcador</td><td>Transporte de jaulas entre áreas</td><td>1:8 rep:jaula · <span class="saving">USD 50K</span></td></tr>
+          <tr><td>Order Picker</td><td>Picking/Put Away racks NT</td><td>Compatible con Jaula 2.0</td></tr>
+          <tr><td>Ring Scanner</td><td>Check-in y Picking manos libres</td><td>+9% / +11% <span class="saving">USD 176K</span></td></tr>
+          <tr><td>Conveyor NT</td><td>Transporte de totes</td><td>+15% Net Put Away <span class="saving">USD 240K</span></td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 10 -->
+    <div class="section" id="s10">
+      <div class="section-badge">10</div>
+      <div class="pt">
+        <h2>Comunicação Visual e 5S</h2>
+        <p class="subtitle">Gate 4 · CIE Local</p>
+        <h3>Kit obrigatório</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Item</th><th>Aplicação</th></tr>
+          <tr><td>Sinais de passilho</td><td>Identificação de corredores e sentido de fluxo MHE</td></tr>
+          <tr><td>Placas de postos de trabalho</td><td>Cada bancada e estação (Packing Mono, Multi, PTW)</td></tr>
+          <tr><td>Placas de docas</td><td>Numeração e tipo (Inbound TT, NT, Transfer, Outbound, MWH)</td></tr>
+          <tr><td>Placas de áreas</td><td>Macroáreas: Receiving, Storage, Packing, Shipping, Returns</td></tr>
+          <tr><td>Banners 5S</td><td>Padrão de organização por área</td></tr>
+          <tr><td>Banners aéreos</td><td>Identificação visual de alto alcance</td></tr>
+          <tr><td>Gestão visual de Tier</td><td>KPIs, plano de ação e rituais de turno</td></tr>
+          <tr><td>LUPs por posto</td><td>Padrão de cada posto de trabalho</td></tr>
+          <tr><td>Dashboard sacas Cheapest</td><td>Controle de Stage Out: sacas por ETD, canalização, destino</td></tr>
+        </table></div>
+        <h3>Toolkits — Portal WOW</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Toolkit</th><th>Conteúdo</th></tr>
+          <tr><td>Branding Operações</td><td>Identidade visual padrão das áreas operacionais</td></tr>
+          <tr><td>Safety</td><td>Sinalizações NR e fluxo MHE</td></tr>
+          <tr><td>5S</td><td>Padrão de organização e identificação por área</td></tr>
+          <tr><td>WOW Nuevas Naves</td><td>Guia completo para novas aberturas</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Comunicación Visual y 5S</h2>
+        <p class="subtitle">Gate 4 · CIE Local</p>
+        <h3>Kit obligatorio</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Ítem</th><th>Aplicación</th></tr>
+          <tr><td>Señales de pasillo</td><td>Identificación de pasillos y sentido de flujo MHE</td></tr>
+          <tr><td>Placas de puestos de trabajo</td><td>Cada mesa y estación (Packing Mono, Multi, PTW)</td></tr>
+          <tr><td>Placas de muelles</td><td>Numeración y tipo (Inbound TT, NT, Transfer, Outbound, MWH)</td></tr>
+          <tr><td>Placas de áreas</td><td>Macrozonas: Receiving, Storage, Packing, Shipping, Returns</td></tr>
+          <tr><td>Banners 5S</td><td>Estándar de organización por área</td></tr>
+          <tr><td>Banners aéreos</td><td>Identificación visual de alto alcance</td></tr>
+          <tr><td>Gestión visual de Tier</td><td>KPIs, plan de acción y rituales de turno</td></tr>
+          <tr><td>LUPs por puesto</td><td>Estándar de cada puesto de trabajo</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 11 -->
+    <div class="section" id="s11">
+      <div class="section-badge">11</div>
+      <div class="pt">
+        <h2>Go-Live e Ramp-Up</h2>
+        <p class="subtitle">Gates 4–5 · CIE Local + Operações</p>
+        <h3>Ramp-Up — Thresholds de progressão</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Semana</th><th>Threshold</th><th>Ações</th></tr>
+          <tr><td>Go-live (W0)</td><td>50%</td><td>Monitorar fluxo, demarcação e adequação dos postos</td></tr>
+          <tr><td>W8</td><td>50% → 60%</td><td>Aumentar volume; monitorar retorno P2M para Put Away</td></tr>
+          <tr><td>W11</td><td>60% → 75%</td><td>Monitorar indicador de retorno, capacidade estática e fluxo NT</td></tr>
+        </table></div>
+        <div class="alert"><strong>Regra de progressão</strong>Avançar por resultado, nunca por calendário. A progressão só ocorre quando os indicadores do patamar anterior estiverem estabilizados.</div>
+        <!-- DIAGRAM: Ramp-Up Progression -->
+        <div style="margin:20px 0;background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:16px">
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="pt">▲ Progressão de volume — Ramp-Up por resultado</p>
+          <p style="font-size:11px;color:#888;margin-bottom:8px;text-align:center;font-weight:600" class="es">▲ Progresión de volumen — Ramp-Up por resultado</p>
+          <svg width="100%" viewBox="0 0 700 190" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,'Segoe UI',sans-serif">
+            <!-- Axes -->
+            <line x1="80" y1="15" x2="80" y2="145" stroke="#333" stroke-width="2"/>
+            <line x1="80" y1="145" x2="660" y2="145" stroke="#333" stroke-width="2"/>
+            <!-- Y labels -->
+            <text x="72" y="148" text-anchor="end" font-size="10" fill="#999">0%</text>
+            <text x="72" y="110" text-anchor="end" font-size="10" fill="#999">50%</text>
+            <text x="72" y="84" text-anchor="end" font-size="10" fill="#999">60%</text>
+            <text x="72" y="56" text-anchor="end" font-size="10" fill="#999">75%</text>
+            <text x="72" y="20" text-anchor="end" font-size="10" fill="#ccc">100%</text>
+            <!-- Grid -->
+            <line x1="80" y1="110" x2="660" y2="110" stroke="#f0f0f0" stroke-width="1"/>
+            <line x1="80" y1="84" x2="660" y2="84" stroke="#f0f0f0" stroke-width="1"/>
+            <line x1="80" y1="56" x2="660" y2="56" stroke="#f0f0f0" stroke-width="1"/>
+            <!-- Step 1: W0 - 50% -->
+            <rect x="100" y="110" width="150" height="35" fill="#1A1A2E" rx="5"/>
+            <text x="175" y="132" text-anchor="middle" font-size="14" fill="#FFE600" font-weight="800">50%</text>
+            <text x="175" y="162" text-anchor="middle" font-size="10" fill="#555" class="pt">Go-Live (W0)</text>
+            <text x="175" y="162" text-anchor="middle" font-size="10" fill="#555" class="es">Go-Live (W0)</text>
+            <text x="175" y="175" text-anchor="middle" font-size="9" fill="#999" class="pt">Monitorar fluxo</text>
+            <text x="175" y="175" text-anchor="middle" font-size="9" fill="#999" class="es">Monitorear flujo</text>
+            <!-- Arrow 1 -->
+            <polygon points="250,117 268,110 268,124" fill="#FFE600"/>
+            <!-- Step 2: W8 - 60% -->
+            <rect x="268" y="84" width="150" height="61" fill="#1A1A2E" rx="5" opacity="0.9"/>
+            <text x="343" y="118" text-anchor="middle" font-size="14" fill="#FFE600" font-weight="800">60%</text>
+            <text x="343" y="162" text-anchor="middle" font-size="10" fill="#555" class="pt">Semana W8</text>
+            <text x="343" y="162" text-anchor="middle" font-size="10" fill="#555" class="es">Semana W8</text>
+            <text x="343" y="175" text-anchor="middle" font-size="9" fill="#999" class="pt">↑ Volume P2M</text>
+            <text x="343" y="175" text-anchor="middle" font-size="9" fill="#999" class="es">↑ Volumen P2M</text>
+            <!-- Arrow 2 -->
+            <polygon points="418,91 436,84 436,98" fill="#FFE600"/>
+            <!-- Step 3: W11 - 75% -->
+            <rect x="436" y="56" width="180" height="89" fill="#0F3460" rx="5"/>
+            <text x="526" y="105" text-anchor="middle" font-size="14" fill="#FFE600" font-weight="800">75%</text>
+            <text x="526" y="162" text-anchor="middle" font-size="10" fill="#555" class="pt">Semana W11</text>
+            <text x="526" y="162" text-anchor="middle" font-size="10" fill="#555" class="es">Semana W11</text>
+            <text x="526" y="175" text-anchor="middle" font-size="9" fill="#999" class="pt">Monitorar estática</text>
+            <text x="526" y="175" text-anchor="middle" font-size="9" fill="#999" class="es">Monitorear estática</text>
+            <!-- Result label -->
+            <text x="390" y="13" text-anchor="middle" font-size="9" fill="#aaa" font-style="italic" class="pt">Avançar por resultado — não por calendário</text>
+            <text x="390" y="13" text-anchor="middle" font-size="9" fill="#aaa" font-style="italic" class="es">Avanzar por resultado — no por calendario</text>
+          </svg>
+        </div>
+        <h3>Indicadores críticos de ramp-up</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Indicador</th><th>Frequência</th></tr>
+          <tr><td>Produtividade P2M (THP)</td><td>Diária</td></tr>
+          <tr><td>Shortage / Overage</td><td>Diária</td></tr>
+          <tr><td>Capacidade estática (volume em piso)</td><td>Diária</td></tr>
+          <tr><td>SLA Estadia (Inbound)</td><td>Por turno</td></tr>
+          <tr><td>Binfullness</td><td>Semanal</td></tr>
+          <tr><td>Net Outbound (ONP)</td><td>Diária</td></tr>
+          <tr><td>FPP</td><td>Diária</td></tr>
+        </table></div>
+        <h3>Licenciamento — Lição aprendida SP26</h3>
+        <div class="alert red"><strong>Nunca antecipar go-live sem avaliar a cadeia de licenciamento</strong>SP26: Go-Live antecipado 21 dias → FR caiu para 68% → postergação de 6 dias por Alvará Provisório.<br><br>Cadeia: LTA → Alvará Sanitário → Alvará Provisório<br>Buffer mínimo recomendado: 30 dias antes do go-live.</div>
+        <h3>Checklist Go-Live</h3>
+        <ul class="checklist">
+          <li>Operational Readiness Checklist 100% concluído</li>
+          <li>Alvará Provisório de Funcionamento emitido e válido</li>
+          <li>Threshold inicial de volume definido (recomendado: 50%)</li>
+          <li>Critérios de progressão documentados e comunicados</li>
+          <li>Protocolo de fluxo não-feliz definido por área e turno</li>
+          <li>Treinamento de representantes concluído</li>
+          <li>Book de Nave atualizado com layout final</li>
+        </ul>
+      </div>
+      <div class="es">
+        <h2>Go-Live y Ramp-Up</h2>
+        <p class="subtitle">Gates 4–5 · CIE Local + Operaciones</p>
+        <h3>Ramp-Up — Umbrales de progresión</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Semana</th><th>Umbral</th><th>Acciones</th></tr>
+          <tr><td>Go-live (W0)</td><td>50%</td><td>Monitorear flujo, demarcación y adecuación de puestos</td></tr>
+          <tr><td>W8</td><td>50% → 60%</td><td>Aumentar volumen; monitorear retorno P2M a Put Away</td></tr>
+          <tr><td>W11</td><td>60% → 75%</td><td>Monitorear indicador de retorno, capacidad estática y flujo NT</td></tr>
+        </table></div>
+        <div class="alert red"><strong>Lección aprendida SP26 — Licencias</strong>Go-Live anticipado 21 días → FR bajó al 68% → postergación de 6 días por Permiso Provisional.<br><br>Cadena: LTA → Permiso Sanitario → Permiso Provisional<br>Buffer mínimo recomendado: 30 días antes del go-live.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 12 -->
+    <div class="section" id="s12">
+      <div class="section-badge">12</div>
+      <div class="pt">
+        <h2>Projetos Benchmark e Savings Validados</h2>
+        <p class="subtitle">Projetos implementados e validados na rede MLB/MLM</p>
+        <h3>Top projetos por saving</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Projeto</th><th>Site</th><th>Ganho</th><th>Saving</th></tr>
+          <tr><td>Picking MWH sem manga</td><td>SP10</td><td>+26% Prod. Picking MWH / +15% SPP</td><td class="saving">USD 1,5M/ano</td></tr>
+          <tr><td>Interliving</td><td>SP10</td><td>Máquina vai cheia e volta cheia</td><td class="saving">USD 900K/ano</td></tr>
+          <tr><td>RC in FC Lean</td><td>SP10</td><td>Eliminação de armazenamento de transferências</td><td class="saving">USD 236K</td></tr>
+          <tr><td>Conveyor NT</td><td>SP10</td><td>+15% Net Put Away</td><td class="saving">USD 240K</td></tr>
+          <tr><td>Simulador SOT</td><td>SP10</td><td>Melhor previsibilidade e conexão S&OP</td><td class="saving">USD 250K</td></tr>
+          <tr><td>Sorter NT (SP11)</td><td>SP11</td><td>ONP +26% · ramp-up 7sem→6dias</td><td class="saving">USD 276K/ano</td></tr>
+          <tr><td>Ring Scanner</td><td>SP10</td><td>+9% Check-in / mãos-livres</td><td class="saving">USD 176K</td></tr>
+          <tr><td>Drop Misto</td><td>SP11/BA02</td><td>+8% prod. picking e put away</td><td class="saving">USD 170–257K/ano</td></tr>
+          <tr><td>Jaula Check-in direto</td><td>SP10/MX05</td><td>Redução de toques · +15% Put Away</td><td class="saving">USD 106–192K</td></tr>
+          <tr><td>Rebocador (1 rep: 8 gaiolas)</td><td>SP10</td><td>-75% deslocamentos</td><td class="saving">USD 50K</td></tr>
+          <tr><td>Preset Sorter Automático</td><td>SP04</td><td>-1% rejeito · +9% HU automático · -10,5 FTE</td><td class="saving">USD 160K/ano</td></tr>
+          <tr><td>VSM Outbound</td><td>SP10</td><td>+12,1% Net Outbound</td><td class="saving">USD 400K</td></tr>
+          <tr><td>Pick2Ship</td><td>SP10/SP09</td><td>+prod. packing · redução de toques</td><td class="saving">USD 21–27K/ano</td></tr>
+          <tr><td>Elevador de Paletes</td><td>SP04</td><td>Eliminação de empilhadeira no fluxo vertical</td><td class="saving">USD 40K</td></tr>
+        </table></div>
+      </div>
+      <div class="es">
+        <h2>Proyectos Benchmark y Savings Validados</h2>
+        <p class="subtitle">Proyectos implementados y validados en la red MLB/MLM</p>
+        <div class="table-wrap"><table>
+          <tr><th>Proyecto</th><th>Site</th><th>Ganancia</th><th>Saving</th></tr>
+          <tr><td>Picking MWH sin manga</td><td>SP10</td><td>+26% Prod. Picking MWH / +15% SPP</td><td class="saving">USD 1,5M/año</td></tr>
+          <tr><td>Interliving</td><td>SP10</td><td>Máquina va llena y vuelve llena</td><td class="saving">USD 900K/año</td></tr>
+          <tr><td>RC in FC Lean</td><td>SP10</td><td>Eliminación de almacenamiento de transferencias</td><td class="saving">USD 236K</td></tr>
+          <tr><td>Conveyor NT</td><td>SP10</td><td>+15% Net Put Away</td><td class="saving">USD 240K</td></tr>
+          <tr><td>Sorter NT</td><td>SP11</td><td>ONP +26%</td><td class="saving">USD 276K/año</td></tr>
+          <tr><td>Ring Scanner</td><td>SP10</td><td>+9% Check-in</td><td class="saving">USD 176K</td></tr>
+          <tr><td>Drop Misto</td><td>SP11/BA02</td><td>+8% prod. picking y put away</td><td class="saving">USD 170–257K/año</td></tr>
+          <tr><td>Rebocador (1:8)</td><td>SP10</td><td>-75% desplazamientos</td><td class="saving">USD 50K</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 13 -->
+    <div class="section" id="s13">
+      <div class="section-badge">13</div>
+      <div class="pt">
+        <h2>Lições Aprendidas por Site</h2>
+        <p class="subtitle">Casos reais de desvio — Gate de prevenção indicado</p>
+
+        <div class="lesson-card">
+          <span class="site-tag">BRRJ01</span>
+          <h4>Shipping longe das docas de saída</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> Outbound<br>Área de Shipping projetada longe das docas de saída. Cada HU completada exigia grande deslocamento — ineficiência estrutural permanente. <strong>Lição:</strong> Shipping deve estar adjacente às docas de saída.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">BRBA01</span>
+          <h4>Packing a 264m do acesso principal</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> Packing<br>23% do headcount percorria ~5 minutos por trajeto. <strong>Lição:</strong> Packing deve estar próximo ao acesso principal.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">BRSC02</span>
+          <h4>Mistura TT/NT em RC in FC</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> RC in FC / MWH<br>Fluxos TT e NT misturados geraram shortage/overage, queda de produtividade P2M e ausência de rastreio de HUs. Correção exigiu 4 fases pós go-live. <strong>Lição:</strong> Separação TT/NT em RC in FC é obrigatória desde o Gate 1.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP18</span>
+          <h4>Bancadas Mono distantes do maior bloco de estoque</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> Packing<br>Mono posicionada próxima ao Bloco B (33,6%) e longe do Bloco A (48,4%). Tempo de deslocamento: 3min10s → 1min15s após inversão. Saving: USD 3,4K/ano. <strong>Lição:</strong> Posicionar Mono adjacente ao maior bloco de estoque.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP25</span>
+          <h4>Inbound sem separação de pallets para decanting</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1–2 · <strong>Processo:</strong> Inbound<br>Sem espaço de 40cm entre pallets, reps não tinham acesso adequado para bipar os totes. <strong>Lição:</strong> Espaçamento de 40cm deve ser dimensionado e demarcado explicitamente.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26</span>
+          <h4>Largura da fita não considerada no dimensionamento</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 2 · <strong>Processo:</strong> Demarcação<br>A fita de 5cm não foi descontada do espaço projetado. Espaço de acesso ao decanting ficou menor que o projetado. <strong>Lição:</strong> Sempre descontar 5cm da fita em todos os espaçamentos.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26 CM#1</span>
+          <h4>Ausência de área de Guardado Cruzado</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> Layout TT<br>Impacto: -7,5% capacidade estática (1,92MM → 1,78MM SIs). Custo: USD 25K. <strong>Lição:</strong> Toda nave TT que recebe de RCs deve prever Guardado Cruzado (ref.: 0,5% da capacidade).</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26 CM#4</span>
+          <h4>Rampa do desenvolvedor sem ART</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 0 · <strong>Processo:</strong> SHE<br>Rampa existente (Prologis) não atendia requisitos SHE para MHE. Custo: USD 22K / 50 dias. <strong>Lição:</strong> Validar infraestrutura do desenvolvedor no Gate 0 — nunca assumir conformidade.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26 CM#5</span>
+          <h4>Big Totable indefinido no Gate 1</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 0 · <strong>Processo:</strong> Layout / Inbound<br>SP26 projetado sem definir destino de Big Totable (TT ou NT). Custo: USD 21,4K / 56 dias. <strong>Lição:</strong> Definição de fluxo Big Totable é premissa de Gate 0.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26 CM#8</span>
+          <h4>Go-Live antecipado sem buffer de licenciamento</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 4 · <strong>Processo:</strong> Go-Live<br>Antecipação de 21 dias reduziu FR para 68%. Cadeia de licenciamento não acompanhou → postergação de 6 dias. <strong>Lição:</strong> Buffer mínimo de 30 dias entre licença e go-live. Nunca antecipar sem avaliar licenciamento.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">BA02 CM#12</span>
+          <h4>Área de Inbound insuficiente para decanting NT</h4>
+          <p><strong>Gate de prevenção:</strong> Gate 1 · <strong>Processo:</strong> Inbound NT<br>Distância HS→Doca de 33m (sem área de decanting). 107/160 docas consumidas para decanting. Remoção de 26 módulos de HS pré go-live. Custo: USD 18K. <strong>Distância mínima recomendada: 38m.</strong><br><br>Também impediu implementação de Drop Misto (+8% prod, USD 256K/ano) e Interleaving (-10% ociosidade).</p>
+        </div>
+
+      </div>
+      <div class="es">
+        <h2>Lecciones Aprendidas por Site</h2>
+        <p class="subtitle">Casos reales de desvío — Gate de prevención indicado</p>
+
+        <div class="lesson-card">
+          <span class="site-tag">BRRJ01</span>
+          <h4>Shipping lejos de los muelles de salida</h4>
+          <p><strong>Gate de prevención:</strong> Gate 1<br>Área de Shipping proyectada lejos de los muelles. Cada HU completada requería gran desplazamiento — ineficiencia estructural permanente.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">BRBA01</span>
+          <h4>Packing a 264m del acceso principal</h4>
+          <p><strong>Gate de prevención:</strong> Gate 1<br>23% del headcount recorría ~5 minutos por trayecto.</p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">BA02 CM#12</span>
+          <h4>Área de Inbound insuficiente para decanting NT</h4>
+          <p><strong>Gate de prevención:</strong> Gate 1<br>Distancia HS→Muelle de 33m (sin área de decanting). 107/160 muelles consumidos para decanting. Remoción de 26 módulos de HS pre go-live. Costo: USD 18K. <strong>Distancia mínima recomendada: 38m.</strong></p>
+        </div>
+
+        <div class="lesson-card">
+          <span class="site-tag">SP26 CM#8</span>
+          <h4>Go-Live anticipado sin buffer de licenciamiento</h4>
+          <p><strong>Gate de prevención:</strong> Gate 4<br>Anticipación de 21 días redujo FR al 68%. Cadena LTA → Permiso Sanitario → Permiso Provisional no acompañó → postergación de 6 días. Buffer mínimo recomendado: 30 días.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SECTION 14: PACKING MONO 3.0 -->
+    <div class="section" id="s14">
+      <div class="section-badge">14</div>
+      <div class="pt">
+        <h2>Packing Mono 3.0</h2>
+        <p class="subtitle">Gate 3–4 · MTM &amp; Design + CIE · Versão 2026 · Referência: OUBP-0004</p>
+        <div class="alert green"><strong>O que é</strong>Bancada de Packing Mono otimizada com melhor ergonomia, disposição de insumos por frequência de uso e maior produtividade (+2% a +5% vs Packing Mono 2.0). Versão única — saída à direita (espelhada apenas em casos excepcionais validados com MTM).</div>
+
+        <h3>Vantagens vs Packing Mono 2.0</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Vantagem</th><th>Detalhe</th></tr>
+          <tr><td>Melhor ergonomia</td><td>Zona verde cobre 92%+ do tempo de operação. Altura regulável por parafusos.</td></tr>
+          <tr><td>Redução da fadiga</td><td>Distância tote entrada → saída pacote: máx. 100 cm</td></tr>
+          <tr><td>Insumos por frequência</td><td>Nível 0 (mais usado) até Nível 4 — raio máx. 80 cm para insumos principais</td></tr>
+          <tr><td>Maior produtividade</td><td>+2% a +5% vs Packing Mono 2.0</td></tr>
+          <tr><td>Payback</td><td>1,2 anos (BR) · 3 anos (MX) · Custo: USD 838 (nova) / USD 419 (retrofit)</td></tr>
+        </table></div>
+
+        <h3>5 Fluxos Operacionais e Produtividades</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Fluxo</th><th>Descrição</th><th>Ring Scanner</th><th>Ring + Sem Bandejas</th><th>Bolsa sobre Mesa</th></tr>
+          <tr><td><strong>I — Mecanizado 3 Níveis</strong></td><td>Entrada totes (Mec. N1) · Saída pacotes (Mec. N2) · Saída totes vazios (Mec. N3)</td><td>213 SI/H</td><td>229 SI/H</td><td>259–263 SI/H</td></tr>
+          <tr><td><strong>II — Mecanizado 2 Níveis</strong></td><td>Entrada totes (Mec. N2) · Saída pacotes (Mec. N1) · Saída totes vazios (Manual)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>III — Espinha de Peixe</strong></td><td>Entrada flowrack (N2) · Saída espinha de peixe · Saída totes (N1)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>IV — Manual</strong></td><td>Entrada flowrack (N2) · Saída flowrack saída · Saída totes (N1)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>V — Manual (Gaiola)</strong></td><td>Entrada flowrack (N2) · Saída gaiola · Saída totes (N1)</td><td>203 SI/H</td><td>217 SI/H</td><td>244–248 SI/H</td></tr>
+        </table></div>
+        <div class="alert"><strong>Premissas de produtividade</strong>SI/MU: 11,9 · SI/Order: 1,2 · SIOC: 16% · Caixa: 3% · Flyer: 81% · Pacotes leves: 98,6%</div>
+
+        <h3>Golden Rules — Resumo</h3>
+        <div class="table-wrap"><table>
+          <tr><th>#</th><th>Regra</th><th>Detalhe</th></tr>
+          <tr><td>1.1</td><td>Suporte de notebook regulável</td><td>Altura ajustável por país (BR: 175,7cm H / 162,4cm M)</td></tr>
+          <tr><td>1.2</td><td>Totes cheios com angulação</td><td>Permite visualização e coleta sem movimentos adicionais</td></tr>
+          <tr><td>1.4</td><td>Mesa de trabalho desobstruída</td><td>Sem teclado/mouse/impressora sobre a mesa — pacotes devem deslizar até a saída</td></tr>
+          <tr><td>1.5</td><td>Distância máxima de movimento</td><td>Tote entrada → saída pacote: máx. 100 cm</td></tr>
+          <tr><td>2.1</td><td>Insumos principais ao alcance</td><td>Caixas e bolsas mais usadas: raio máx. 80 cm</td></tr>
+          <tr><td>2.3</td><td>Etiquetas adicionais ao alcance</td><td>Pesado, frágil, vidro, líquido: raio máx. 80 cm</td></tr>
+          <tr><td>3.3</td><td>Impressora com Peel Off ativo</td><td>Desprendimento automático de etiquetas — sem descarte manual do papel</td></tr>
+          <tr><td>3.4</td><td>Ring Scanner como padrão</td><td>Mãos livres — modelos: RS5100 / RS6100</td></tr>
+        </table></div>
+
+        <h3>Ergonomia — Zonas de Alcance</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Zona</th><th>Cor</th><th>Descrição</th><th>Uso recomendado</th></tr>
+          <tr><td><strong>Zona Verde</strong></td><td>🟢 Primária</td><td>Movimento natural dos antebraços</td><td>Insumos de maior rotação — REP deve estar aqui 92%+ do tempo</td></tr>
+          <tr><td><strong>Zona Amarela</strong></td><td>🟡 Secundária</td><td>Braços estendidos</td><td>Insumos de uso frequente, mas não constante</td></tr>
+          <tr><td><strong>Zona Vermelha</strong></td><td>🔴 Restrita</td><td>Exige inclinar o tronco ou deslocar</td><td>Evitar — impacta produtividade e saúde</td></tr>
+        </table></div>
+
+        <h3>Footprint — Distâncias entre bancadas</h3>
+        <div class="alert"><strong>Regra de ouro</strong>Manter mínimo de 2m entre totes ou entre bancadas. NÃO instalar duas Packing Mono 3.0 costas com costas — insumos são reabastecidos pela parte posterior.</div>
+        <div class="table-wrap"><table>
+          <tr><th>Fluxo</th><th>Observação de posicionamento</th></tr>
+          <tr><td>Espinha de Peixe (Fluxo III)</td><td>Flowrack de entrada alinhado com a metade do início da mesa — evita movimentos do REP</td></tr>
+          <tr><td>Manual (Fluxo IV)</td><td>Flowrack de saída alinhado com a metade da mesa para melhor desempenho</td></tr>
+          <tr><td>Espelhado (saída esquerda)</td><td>Somente em casos de início/fim de conveyor ou falta crítica de espaço — validar com MTM obrigatoriamente</td></tr>
+        </table></div>
+
+        <h3>Checklist de Saída — Instalação Packing Mono 3.0</h3>
+        <ul class="checklist">
+          <li>Checklist de Recebimento executado (Golden Rules, bordas, estabilidade, ergonomia)</li>
+          <li>Altura da bancada ajustada para o time (dados de altura por país)</li>
+          <li>Impressora com Peel Off ativo e posicionada à esquerda</li>
+          <li>Ring Scanner configurado (BOM)</li>
+          <li>Insumos organizados por frequência de uso (Nível 0→4)</li>
+          <li>Distância entre bancadas ≥ 2m validada</li>
+          <li>Abastecimento pela parte posterior garantido</li>
+          <li>Plano de manutenção definido e comunicado</li>
+        </ul>
+      </div>
+      <div class="es">
+        <h2>Packing Mono 3.0</h2>
+        <p class="subtitle">Gate 3–4 · MTM &amp; Design + CIE · Versión 2026 · Referencia: OUBP-0004</p>
+        <div class="alert green"><strong>Qué es</strong>Mesa de Packing Mono optimizada con mejor ergonomía, disposición de insumos por frecuencia de uso y mayor productividad (+2% a +5% vs Packing Mono 2.0). Versión única — salida a la derecha.</div>
+
+        <h3>5 Flujos Operativos y Productividades</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Flujo</th><th>Descripción</th><th>Ring Scanner</th><th>Ring + Sin Charolas</th><th>Bolsa sobre Mesa</th></tr>
+          <tr><td><strong>I — Mecanizado 3 Niveles</strong></td><td>Entrada totes (Mec. N1) · Salida paquetes (Mec. N2) · Salida totes vacíos (Mec. N3)</td><td>213 SI/H</td><td>229 SI/H</td><td>259–263 SI/H</td></tr>
+          <tr><td><strong>II — Mecanizado 2 Niveles</strong></td><td>Entrada totes (Mec. N2) · Salida paquetes (Mec. N1) · Salida totes vacíos (Manual)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>III — Espina de Pescado</strong></td><td>Entrada flowrack (N2) · Salida espina de pescado · Salida totes (N1)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>IV — Manual</strong></td><td>Entrada flowrack (N2) · Salida flowrack salida · Salida totes (N1)</td><td>218 SI/H</td><td>235 SI/H</td><td>267–271 SI/H</td></tr>
+          <tr><td><strong>V — Manual (Jaula)</strong></td><td>Entrada flowrack (N2) · Salida jaula · Salida totes (N1)</td><td>203 SI/H</td><td>217 SI/H</td><td>244–248 SI/H</td></tr>
+        </table></div>
+
+        <h3>Ergonomía — Zonas de Alcance</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Zona</th><th>Color</th><th>Descripción</th><th>Uso recomendado</th></tr>
+          <tr><td><strong>Zona Verde</strong></td><td>🟢 Primaria</td><td>Movimiento natural de antebrazos</td><td>Insumos de mayor rotación — REP debe estar aquí 92%+ del tiempo</td></tr>
+          <tr><td><strong>Zona Amarilla</strong></td><td>🟡 Secundaria</td><td>Brazos extendidos</td><td>Insumos de uso frecuente, no constante</td></tr>
+          <tr><td><strong>Zona Roja</strong></td><td>🔴 Restringida</td><td>Requiere inclinar el tronco</td><td>Evitar — impacta productividad y salud</td></tr>
+        </table></div>
+
+        <h3>Payback y Datos de Compra</h3>
+        <div class="table-wrap"><table>
+          <tr><th>País</th><th>Payback</th><th>Costo nueva</th><th>Costo retrofit</th></tr>
+          <tr><td>Brasil</td><td>1,2 años</td><td>USD 838</td><td>USD 419</td></tr>
+          <tr><td>México</td><td>3 años</td><td>USD 838</td><td>USD 419</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- SECTION 15: OPS MODEL / BOOK DE NAVE -->
+    <div class="section" id="s15">
+      <div class="section-badge">15</div>
+      <div class="pt">
+        <h2>OPS Model — Book de Nave</h2>
+        <p class="subtitle">Exemplo real: BRSP26 · Fev/2026 · Operação Totable · 27K m²</p>
+        <div class="alert blue"><strong>O que é o OPS Model?</strong>Documento que dá visibilidade aos stakeholders sobre as definições do modelo de funcionamento do novo armazém: layout operativo, cenários, malha, ramp-up, contratação, CAPEX e Operational Readiness — com foco nos primeiros meses de operação.</div>
+
+        <h3>Premissas de Design (Design Key Assumptions)</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parâmetro</th><th>Valor SP26</th></tr>
+          <tr><td>Days on Hand (DOH)</td><td>35–37 dias [target: 30]</td></tr>
+          <tr><td>Share Mono/Multi (SHP)</td><td>75% / 25%</td></tr>
+          <tr><td>SIs/SHP Geral</td><td>1,4</td></tr>
+          <tr><td>SIs/SHP Multi</td><td>3,3</td></tr>
+          <tr><td>Share Totable / NT</td><td>99,5% / 0,5%</td></tr>
+          <tr><td>Volumetria TT / NT</td><td>3,7 L / 18,6 L</td></tr>
+          <tr><td>Peak Hour</td><td>5,0%</td></tr>
+          <tr><td>Peak Day</td><td>115%</td></tr>
+          <tr><td>RC Inbound</td><td>100%</td></tr>
+          <tr><td>Capacidade Dinâmica</td><td>~5.000 SHP/h</td></tr>
+          <tr><td>Capacidade Estática</td><td>~1,78 MM SIs</td></tr>
+        </table></div>
+
+        <h3>Cenários Operativos Avaliados</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Cenário</th><th>PT</th><th>Prós</th><th>Contras</th></tr>
+          <tr><td>Pós-Picking em SP25</td><td>3,7</td><td>Maior capacidade estática</td><td>Maior dependência de SP25</td></tr>
+          <tr><td>Pós-Packing em SP25</td><td>3,2</td><td>Maior PT</td><td>Complexidade operacional</td></tr>
+          <tr><td>Padrão Mecanizado</td><td>2,5</td><td>Processo std em outras operações</td><td>Menor capacidade estática</td></tr>
+          <tr><td><strong>Padrão Manual (adotado)</strong></td><td>2,8</td><td>Processo std sem mecanização</td><td>Maior PT, mais movimentações, separação 100% manual</td></tr>
+        </table></div>
+
+        <h3>Modelo de Escala 5x2 — Saving USD 910,6K/ano</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Item</th><th>Qtd</th><th>USD/ano</th></tr>
+          <tr><td>HC (total eliminado)</td><td>61</td><td>653,5K</td></tr>
+          <tr><td>Refeitório</td><td>61</td><td>128,8K</td></tr>
+          <tr><td>Fretado</td><td>56</td><td>128,3K</td></tr>
+          <tr><td><strong>Saving Anual Total</strong></td><td>—</td><td><strong>USD 910,6K</strong></td></tr>
+        </table></div>
+        <div class="alert"><strong>Contrapartida — Last Unit</strong>50K SIs/semana · 30% share estimado Last Unit · Impacto anual: USD 545,45K (câmbio R$5,50). O modelo 5x2 opera 6 dias/semana — T4 (seg-sáb) e T5 (dom-sex).</div>
+
+        <h3>Plano de Ramp-Up — BRSP26</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Semana</th><th>Estoque</th><th>Capacidade</th><th>% Ocupação</th></tr>
+          <tr><td>W13 (Go-Live)</td><td>116,1K SIs</td><td>1,53M</td><td>7,6%</td></tr>
+          <tr><td>W14 (W+1)</td><td>241,9K</td><td>1,75M</td><td>13,8%</td></tr>
+          <tr><td>W15</td><td>379,6K</td><td>1,75M</td><td>21,7%</td></tr>
+          <tr><td>W16</td><td>565,6K</td><td>1,75M</td><td>32,3%</td></tr>
+          <tr><td>W17</td><td>681,4K</td><td>1,75M</td><td>38,9%</td></tr>
+          <tr><td>W21</td><td>1,2M</td><td>1,75M</td><td>68,7%</td></tr>
+          <tr><td>W23 (End Game)</td><td>1,78M</td><td>1,78M</td><td>94,5–100%</td></tr>
+        </table></div>
+        <div class="alert"><strong>Milestone W21</strong>Montagem 100% das estruturas de RS Metálico → +31.199 SIs de capacidade → cenário End Game atingido.</div>
+
+        <h3>CAPEX Startup</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Item</th><th>Qtd</th></tr>
+          <tr><td>Carros Picking</td><td>90</td></tr>
+          <tr><td>Bancadas Mono</td><td>22</td></tr>
+          <tr><td>Bancadas PTW</td><td>10</td></tr>
+          <tr><td>Carros Put Away</td><td>40</td></tr>
+          <tr><td>Carros Pick to Ship</td><td>10</td></tr>
+          <tr><td>Mesa Packing 3.0</td><td>22</td></tr>
+          <tr><td><strong>CAPEX Startup Total</strong></td><td><strong>USD 341,7K</strong></td></tr>
+        </table></div>
+
+        <h3>KPIs Operational Readiness</h3>
+        <div class="table-wrap"><table>
+          <tr><th>KPI</th><th>O que monitora</th></tr>
+          <tr><td>Volumes IN/OUT</td><td>Projetado vs real</td></tr>
+          <tr><td>OOT</td><td>Real vs target regional 98,0%</td></tr>
+          <tr><td>Ocupação por Área</td><td>SIs armazenados e % ocupação por categoria (BL, RS Cartón, RS Metálico)</td></tr>
+          <tr><td>GNP</td><td>Produtividade líquida real vs target</td></tr>
+          <tr><td>People</td><td>HC real vs planejado</td></tr>
+          <tr><td>Binfullness</td><td>Real vs target por estrutura (RS, BL, RK)</td></tr>
+        </table></div>
+
+        <h3>Estrutura do OPS Model — Índice padrão</h3>
+        <div class="flow">
+1. Objetivo do Projeto
+2. Estudo de Cenário e Layout Operativo
+3. Estudo de Escala
+4. Malha (Rede de Distribuição)
+5. Plano de Ramp-Up
+6. Hiring + Training
+7. Compras / CAPEX
+8. Costos
+9. Software Deploy Management
+10. Operational Readiness
+        </div>
+      </div>
+      <div class="es">
+        <h2>OPS Model — Book de Nave</h2>
+        <p class="subtitle">Ejemplo real: BRSP26 · Feb/2026 · Operación Totable · 27K m²</p>
+        <div class="alert blue"><strong>¿Qué es el OPS Model?</strong>Documento que da visibilidad a los stakeholders sobre las definiciones del modelo de funcionamiento del nuevo almacén: layout operativo, escenarios, malla, ramp-up, contratación, CAPEX y Operational Readiness.</div>
+
+        <h3>Premisas de Diseño (Design Key Assumptions)</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Parámetro</th><th>Valor SP26</th></tr>
+          <tr><td>Days on Hand (DOH)</td><td>35–37 días [target: 30]</td></tr>
+          <tr><td>Share Mono/Multi (SHP)</td><td>75% / 25%</td></tr>
+          <tr><td>SIs/SHP General</td><td>1,4</td></tr>
+          <tr><td>Share Totable / NT</td><td>99,5% / 0,5%</td></tr>
+          <tr><td>Volumetría TT / NT</td><td>3,7 L / 18,6 L</td></tr>
+          <tr><td>Peak Hour</td><td>5,0%</td></tr>
+          <tr><td>Peak Day</td><td>115%</td></tr>
+          <tr><td>Capacidad Dinámica</td><td>~5.000 SHP/h</td></tr>
+          <tr><td>Capacidad Estática</td><td>~1,78 MM SIs</td></tr>
+        </table></div>
+
+        <h3>Modelo de Escala 5x2 — Saving USD 910,6K/año</h3>
+        <div class="table-wrap"><table>
+          <tr><th>Ítem</th><th>Cant.</th><th>USD/año</th></tr>
+          <tr><td>HC (total eliminado)</td><td>61</td><td>653,5K</td></tr>
+          <tr><td>Comedor</td><td>61</td><td>128,8K</td></tr>
+          <tr><td>Transporte</td><td>56</td><td>128,3K</td></tr>
+          <tr><td><strong>Saving Anual Total</strong></td><td>—</td><td><strong>USD 910,6K</strong></td></tr>
+        </table></div>
+
+        <h3>Estructura del OPS Model — Índice estándar</h3>
+        <div class="flow">
+1. Objetivo del Proyecto
+2. Estudio de Escenario y Layout Operativo
+3. Estudio de Escala
+4. Malla (Red de Distribución)
+5. Plan de Ramp-Up
+6. Hiring + Training
+7. Compras / CAPEX
+8. Costos
+9. Software Deploy Management
+10. Operational Readiness
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+function setLang(lang){
+  // Atualiza botões via data-lang
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+  });
+
+  // Inline tags que devem ser display:inline (não block)
+  const inlineTags = new Set(['SPAN','A','STRONG','EM','B','I','LABEL','TD','TH']);
+
+  // Mostra/esconde elementos .pt
+  document.querySelectorAll('.pt').forEach(el=>{
+    if(el.classList.contains('nav-arrow') || el.classList.contains('lang-btn')) return;
+    el.style.display = lang==='pt'
+      ? (inlineTags.has(el.tagName) ? 'inline' : 'block')
+      : 'none';
+  });
+
+  // Mostra/esconde elementos .es
+  document.querySelectorAll('.es').forEach(el=>{
+    if(el.classList.contains('nav-arrow') || el.classList.contains('lang-btn')) return;
+    el.style.display = lang==='es'
+      ? (inlineTags.has(el.tagName) ? 'inline' : 'block')
+      : 'none';
+  });
+
+  document.documentElement.lang = lang;
+  // Persiste a preferência via window.GRID.state (compatível com Grid sandbox)
+  if (window.GRID) {
+    window.GRID.state.get().then(({ state, updated_at }) => {
+      window.GRID.state.set({ ...state, lang }, updated_at);
+    });
+  }
+}
+
+// Inicializa idioma ao carregar a página
+document.addEventListener('DOMContentLoaded', async () => {
+  let saved = 'pt';
+  if (window.GRID) {
+    const { state } = await window.GRID.state.get();
+    if (state && state.lang) saved = state.lang;
+  }
+  setLang(saved);
+});
+
+function goTo(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  const idx=['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15'].indexOf(id);
+  document.querySelectorAll('.nav-item').forEach((el,i)=>el.classList.toggle('active',i===idx));
+}
+function scrollTo(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+// Active nav on scroll
+const sections = ['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14','s15'];
+const navItems = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', ()=>{
+  let current = '';
+  sections.forEach(id=>{
+    const el = document.getElementById(id);
+    if(el && el.getBoundingClientRect().top < 120) current = id;
+  });
+  navItems.forEach((item,i)=>{
+    item.classList.toggle('active', sections[i]=== current || (current==='' && i===0));
+  });
+},{passive:true});
+</script>
+</body>
+</html>

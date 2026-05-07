@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadoras | PlayBook Fulfillment CIE</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F5F6FA;color:#2d2d2d;min-height:100vh}
+
+/* TOP BAR */
+.topbar{background:#1A1A2E;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar-left{display:flex;align-items:center;gap:16px}
+.topbar a{color:#FFE600;font-size:13px;font-weight:700;text-decoration:none}
+.topbar a:hover{text-decoration:underline}
+.topbar h1{font-size:16px;font-weight:800;color:#fff}
+.lang-toggle{display:flex;background:#0d0d1f;border-radius:6px;overflow:hidden}
+.lang-btn{padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s}
+.lang-btn.active{background:#FFE600;color:#1A1A2E}
+
+/* PAGE */
+.page{max-width:960px;margin:0 auto;padding:28px 24px}
+
+/* CALC CARD */
+.calc-card{background:#fff;border-radius:12px;padding:28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid #eee}
+.calc-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #f0f0f0}
+.calc-icon{width:48px;height:48px;border-radius:10px;background:#1A1A2E;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.calc-title h2{font-size:18px;font-weight:800;color:#1A1A2E;margin-bottom:3px}
+.calc-title p{font-size:12px;color:#888}
+
+/* FORM GRID */
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:20px}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:12px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.4px}
+.form-group input,.form-group select{border:1.5px solid #e0e0e0;border-radius:7px;padding:10px 12px;font-size:14px;font-family:inherit;color:#333;transition:border .2s;background:#fff}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#FFE600;box-shadow:0 0 0 3px rgba(255,230,0,.15)}
+.form-hint{font-size:11px;color:#aaa;margin-top:2px}
+.form-group .standard{font-size:11px;color:#43a047;font-weight:700}
+
+/* RESULT PANEL */
+.result-panel{background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:20px;margin-top:4px}
+.result-panel h3{font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.result-item{background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #eef}
+.result-item .val{font-size:24px;font-weight:800;color:#1A1A2E;line-height:1}
+.result-item .unit{font-size:11px;color:#888;margin-top:4px}
+.result-item .label{font-size:11px;color:#555;margin-top:6px;font-weight:600}
+.result-item.highlight .val{color:#FFE600;background:#1A1A2E;border-radius:6px;padding:4px 8px}
+.result-item.warn .val{color:#e53935}
+.result-item.ok .val{color:#43a047}
+
+/* ALERT BOX */
+.alert{padding:12px 14px;border-radius:6px;font-size:12px;margin-top:14px;line-height:1.6}
+.alert.yellow{background:#FFFDE7;border-left:4px solid #FFE600;color:#5a4a00}
+.alert.red{background:#FFEBEE;border-left:4px solid #e53935;color:#7f0000}
+.alert.green{background:#E8F5E9;border-left:4px solid #43a047;color:#1b5e20}
+.alert strong{font-weight:800}
+
+/* FORMULA BOX */
+.formula-box{background:#1A1A2E;border-radius:8px;padding:14px;margin-top:14px}
+.formula-box h4{font-size:11px;color:#FFE600;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
+.formula-box p{font-size:12px;color:#ccc;line-height:1.8;font-family:monospace}
+
+/* DIVIDER */
+.section-divider{display:flex;align-items:center;gap:12px;margin:28px 0 0;padding-top:24px;border-top:2px dashed #f0f0f0}
+.section-divider h3{font-size:11px;font-weight:700;color:#bbb;text-transform:uppercase;letter-spacing:1px;white-space:nowrap}
+.section-divider hr{flex:1;border:none;border-top:1px solid #f0f0f0}
+
+/* REFERENCE TABLE */
+.ref-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12px}
+.ref-table th{background:#1A1A2E;color:#fff;padding:7px 10px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.ref-table td{padding:7px 10px;border-bottom:1px solid #f5f5f5;color:#555;vertical-align:top}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table tr:hover td{background:#fafafa}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1A1A2E,#0F3460);color:#fff;border-radius:12px;padding:28px 28px 24px;margin-bottom:24px}
+.hero h1{font-size:22px;font-weight:800;margin-bottom:6px}
+.hero p{font-size:13px;opacity:.8;line-height:1.6}
+.hero .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.hero .chip{background:rgba(255,255,255,.1);padding:5px 12px;border-radius:12px;font-size:11px}
+
+/* RESPONSIVE */
+@media(max-width:600px){.form-grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr 1fr}}
+
+/* LANG */
+.es{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html">← <span class="pt">PlayBook</span><span class="es">PlayBook</span></a>
+    <h1 class="pt">Calculadoras de Buffer e Stage</h1>
+    <h1 class="es">Calculadoras de Buffer y Stage</h1>
+  </div>
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="pt" onclick="setLang('pt')">🇧🇷 PT</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')">🇪🇸 ES</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="pt">
+      <h1>Calculadoras de Buffer e Stage</h1>
+      <p>Dimensione buffers de carrinhos e áreas de Stage In/Out com base nos padrões técnicos do PlayBook CIE. Todas as fórmulas são baseadas em projetos reais da rede.</p>
+      <div class="chips">
+        <span class="chip">📦 Buffer de Carrinhos</span>
+        <span class="chip">🚛 Stage In — Inbound</span>
+        <span class="chip">📤 Stage Out — Expedição</span>
+      </div>
+    </div>
+    <div class="es">
+      <h1>Calculadoras de Buffer y Stage</h1>
+      <p>Dimensione buffers de carros y áreas de Stage In/Out basado en los estándares técnicos del PlayBook CIE. Todas las fórmulas están basadas en proyectos reales de la red.</p>
+      <div class="chips">
+        <span class="chip">📦 Buffer de Carros</span>
+        <span class="chip">🚛 Stage In — Inbound</span>
+        <span class="chip">📤 Stage Out — Expedición</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CALC 1: BUFFER CARRINHOS ==================== -->
+  <div class="calc-card">
+    <div class="calc-header">
+      <div class="calc-icon">🛒</div>
+      <div class="calc-title">
+        <h2 class="pt">Calculadora 1 — Buffer de Carrinhos</h2>
+        <h2 class="es">Calculadora 1 — Buffer de Carros</h2>
+        <p class="pt">Dimensiona a área física e quantidade de posições para buffer de carrinhos de picking ou Put Away (PA)</p>
+        <p class="es">Dimensiona el área física y cantidad de posiciones para buffer de carros de picking o Put Away (PA)</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="pt">Qtd. de carrinhos necessários</label>
+        <label class="es">Cant. de carros necesarios</label>
+        <input type="number" id="c1_qtd" value="30" min="1" max="500" oninput="calcCarrinhos()">
+        <span class="form-hint standard pt">⚡ Mínimo recomendado: 30 carrinhos por buffer</span>
+        <span class="form-hint standard es">⚡ Mínimo recomendado: 30 carros por buffer</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Largura do carrinho (cm)</label>
+        <label class="es">Ancho del carro (cm)</label>
+        <input type="number" id="c1_larg" value="61" min="40" max="120" oninput="calcCarrinhos()">
+        <span class="form-hint pt">Padrão PlayBook: 61 cm</span>
+        <span class="form-hint es">Estándar PlayBook: 61 cm</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Profundidade do carrinho (cm)</label>
+        <label class="es">Profundidad del carro (cm)</label>
+        <input type="number" id="c1_prof" value="80" min="40" max="150" oninput="calcCarrinhos()">
+        <span class="form-hint pt">Profundidade típica de carrinhos de picking</span>
+        <span class="form-hint es">Profundidad típica de carros de picking</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Nº de fileiras</label>
+        <label class="es">Nº de filas</label>
+        <select id="c1_fileiras" oninput="calcCarrinhos()">
+          <option value="1">1 fileira</option>
+          <option value="2" selected>2 fileiras</option>
+          <option value="3">3 fileiras</option>
+        </select>
+        <span class="form-hint pt">Mais fileiras = área mais compacta</span>
+        <span class="form-hint es">Más filas = área más compacta</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Fita de separação (cm)</label>
+        <label class="es">Cinta de separación (cm)</label>
+        <input type="number" id="c1_fita" value="5" min="3" max="10" oninput="calcCarrinhos()">
+        <span class="form-hint standard pt">⚡ Padrão PlayBook: 5 cm</span>
+        <span class="form-hint standard es">⚡ Estándar PlayBook: 5 cm</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Tipo de uso</label>
+        <label class="es">Tipo de uso</label>
+        <select id="c1_tipo" oninput="calcCarrinhos()">
+          <option value="picking" class="pt">Picking</option>
+          <option value="picking" class="es">Picking</option>
+          <option value="pa" class="pt">Put Away (PA)</option>
+          <option value="pa" class="es">Put Away (PA)</option>
+          <option value="cheapest" class="pt">Cheapest Shipment</option>
+          <option value="cheapest" class="es">Cheapest Shipment</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <h3>📊 <span class="pt">Resultado</span><span class="es">Resultado</span></h3>
+      <div class="result-grid">
+        <div class="result-item highlight">
+          <div class="val" id="c1_r_posicoes">15</div>
+          <div class="unit" id="c1_r_posicoes_u" class="pt">posições / fileira</div>
+          <div class="label pt">Posições por fileira</div>
+          <div class="label es">Posiciones por fila</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c1_r_compr">9,9</div>
+          <div class="unit">m</div>
+          <div class="label pt">Comprimento do buffer</div>
+          <div class="label es">Largo del buffer</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c1_r_larg_total">1,6</div>
+          <div class="unit">m</div>
+          <div class="label pt">Largura total</div>
+          <div class="label es">Ancho total</div>
+        </div>
+        <div class="result-item highlight">
+          <div class="val" id="c1_r_area">15,8</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área total do buffer</div>
+          <div class="label es">Área total del buffer</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c1_r_esp_pos">66</div>
+          <div class="unit">cm / posição</div>
+          <div class="label pt">Espaço por posição</div>
+          <div class="label es">Espacio por posición</div>
+        </div>
+      </div>
+      <div id="c1_alert" class="alert yellow" style="display:none"></div>
+    </div>
+
+    <div class="formula-box">
+      <h4 class="pt">Fórmulas utilizadas</h4>
+      <h4 class="es">Fórmulas utilizadas</h4>
+      <p>
+        Espaço por posição  = Largura_carrinho + Fita  (cm)<br>
+        Posições_por_fileira = ⌈ Qtd_carrinhos ÷ Nº_fileiras ⌉<br>
+        Comprimento_buffer  = Posições_por_fileira × Espaço_por_posição ÷ 100  (m)<br>
+        Largura_total       = Profundidade_carrinho × Nº_fileiras ÷ 100  (m)<br>
+        Área_total          = Comprimento × Largura  (m²)
+      </p>
+    </div>
+
+    <div class="section-divider">
+      <h3 class="pt">Referências do PlayBook</h3>
+      <h3 class="es">Referencias del PlayBook</h3>
+      <hr>
+    </div>
+    <table class="ref-table">
+      <tr><th class="pt">Parâmetro</th><th class="es">Parámetro</th><th class="pt">Valor padrão</th><th class="es">Valor estándar</th><th class="pt">Fonte</th><th class="es">Fuente</th></tr>
+      <tr><td class="pt">Largura interna por posição</td><td class="es">Ancho interno por posición</td><td>60–61 cm</td><td>60–61 cm</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+      <tr><td class="pt">Fita de separação</td><td class="es">Cinta de separación</td><td>5 cm</td><td>5 cm</td><td>PlayBook § 7</td><td>PlayBook § 7</td></tr>
+      <tr><td class="pt">Mínimo por buffer</td><td class="es">Mínimo por buffer</td><td>30 carrinhos</td><td>30 carros</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+    </table>
+  </div>
+
+  <!-- ==================== CALC 2: STAGE IN ==================== -->
+  <div class="calc-card">
+    <div class="calc-header">
+      <div class="calc-icon">🚛</div>
+      <div class="calc-title">
+        <h2 class="pt">Calculadora 2 — Stage In (Inbound)</h2>
+        <h2 class="es">Calculadora 2 — Stage In (Inbound)</h2>
+        <p class="pt">Dimensiona a área de stage de doca, decanting e buffer de gaiolas para o Inbound</p>
+        <p class="es">Dimensiona el área de stage de muelle, decanting y buffer de jaulas para el Inbound</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="pt">Nº de docas do Inbound</label>
+        <label class="es">Nº de muelles de Inbound</label>
+        <input type="number" id="c2_docas" value="10" min="1" max="200" oninput="calcStageIn()">
+      </div>
+      <div class="form-group">
+        <label class="pt">Tipo de veículo predominante</label>
+        <label class="es">Tipo de vehículo predominante</label>
+        <select id="c2_veiculo" oninput="calcStageIn()">
+          <option value="28" class="pt">Carreta (28 posições)</option>
+          <option value="28" class="es">Camión (28 posiciones)</option>
+          <option value="48" class="pt">Bitrem (48 posições)</option>
+          <option value="48" class="es">Bitren (48 posiciones)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="pt">Tipo de operação</label>
+        <label class="es">Tipo de operación</label>
+        <select id="c2_operacao" oninput="calcStageIn()">
+          <option value="nt" class="pt">Non-Totable (NT) — 38m mínimo</option>
+          <option value="nt" class="es">Non-Totable (NT) — 38m mínimo</option>
+          <option value="tt" class="pt">Totable (TT) — 25m padrão</option>
+          <option value="tt" class="es">Totable (TT) — 25m estándar</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="pt">% docas ativas simultaneamente</label>
+        <label class="es">% muelles activos simultáneamente</label>
+        <input type="number" id="c2_pct_ativas" value="70" min="10" max="100" oninput="calcStageIn()">
+        <span class="form-hint pt">Considere a capacidade operacional do time</span>
+        <span class="form-hint es">Considere la capacidad operativa del equipo</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Largura por doca (m)</label>
+        <label class="es">Ancho por muelle (m)</label>
+        <input type="number" id="c2_larg_doca" value="3.5" min="2.5" max="6" step="0.1" oninput="calcStageIn()">
+        <span class="form-hint standard pt">⚡ Padrão: 3,5m por doca</span>
+        <span class="form-hint standard es">⚡ Estándar: 3,5m por muelle</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Pallets empilhados por posição</label>
+        <label class="es">Pallets apilados por posición</label>
+        <input type="number" id="c2_pilha" value="3" min="1" max="6" oninput="calcStageIn()">
+        <span class="form-hint pt">Para decanting (padrão: 3 pallets)</span>
+        <span class="form-hint es">Para decanting (estándar: 3 pallets)</span>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <h3>📊 <span class="pt">Resultado</span><span class="es">Resultado</span></h3>
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="val" id="c2_r_docas_ativas">7</div>
+          <div class="unit" class="pt">docas</div>
+          <div class="label pt">Docas ativas simultâneas</div>
+          <div class="label es">Muelles activos simultáneos</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c2_r_pallets_doca">84</div>
+          <div class="unit" class="pt">pallets</div>
+          <div class="label pt">Pallets em piso (decanting / doca ativa)</div>
+          <div class="label es">Pallets en piso (decanting / muelle activo)</div>
+        </div>
+        <div class="result-item highlight">
+          <div class="val" id="c2_r_area_stage">24,5</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área de stage por doca</div>
+          <div class="label es">Área de stage por muelle</div>
+        </div>
+        <div class="result-item highlight">
+          <div class="val" id="c2_r_area_decanting">52,5</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área de decanting por doca</div>
+          <div class="label es">Área de decanting por muelle</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c2_r_area_total">535</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área total Inbound (ativas)</div>
+          <div class="label es">Área total Inbound (activos)</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c2_r_distancia">38</div>
+          <div class="unit">m</div>
+          <div class="label pt">Distância HS → Doca recomendada</div>
+          <div class="label es">Distancia HS → Muelle recomendada</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c2_r_docas_decanting">2,8</div>
+          <div class="unit" class="pt">docas</div>
+          <div class="label pt">Docas consumidas por decanting/caminhão</div>
+          <div class="label es">Muelles consumidos por decanting/camión</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c2_r_posicoes_total">280</div>
+          <div class="unit" class="pt">posições</div>
+          <div class="label pt">Total posições de palete (todas docas)</div>
+          <div class="label es">Total posiciones de pallet (todos muelles)</div>
+        </div>
+      </div>
+      <div id="c2_alert" class="alert yellow"></div>
+    </div>
+
+    <div class="formula-box">
+      <h4 class="pt">Fórmulas utilizadas</h4>
+      <h4 class="es">Fórmulas utilizadas</h4>
+      <p>
+        Docas_ativas           = Nº_docas × (% ativas ÷ 100)<br>
+        Pallets_piso_decanting = Posições_veículo × Pilha  (pallets por palete em decanting)<br>
+        Docas_consumidas       = Pallets_piso_decanting ÷ 30  (posições por doca)<br>
+        Área_stage_por_doca    = 10m × Largura_doca<br>
+        Área_decanting_por_doca= Profund_decanting × Largura_doca<br>
+        Área_total             = Docas_ativas × (Área_stage + Área_decanting)<br>
+        <br>
+        ⚠ Profundidade decanting: NT = 15m min · TT = 8m min  (ref. PlayBook § 5.1 + BA02)
+      </p>
+    </div>
+
+    <div class="section-divider">
+      <h3 class="pt">Referências do PlayBook</h3>
+      <h3 class="es">Referencias del PlayBook</h3>
+      <hr>
+    </div>
+    <table class="ref-table">
+      <tr><th class="pt">Parâmetro</th><th class="es">Parámetro</th><th class="pt">Valor</th><th class="es">Valor</th><th class="pt">Fonte</th><th class="es">Fuente</th></tr>
+      <tr><td class="pt">Posições por carreta</td><td class="es">Posiciones por camión</td><td>28</td><td>28</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+      <tr><td class="pt">Posições por bitrem</td><td class="es">Posiciones por bitren</td><td>48</td><td>48</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+      <tr><td class="pt">Stage de doca (profund.)</td><td class="es">Stage de muelle (profund.)</td><td>10 m</td><td>10 m</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+      <tr><td class="pt">Decanting mínimo NT</td><td class="es">Decanting mínimo NT</td><td>15 m</td><td>15 m</td><td>BA02 CM#12 + PlayBook § 13</td><td>BA02 CM#12 + PlayBook § 13</td></tr>
+      <tr><td class="pt">Distância HS→Doca NT</td><td class="es">Distancia HS→Muelle NT</td><td>38 m</td><td>38 m</td><td>BA02 CM#12</td><td>BA02 CM#12</td></tr>
+      <tr><td class="pt">Pallets por palete (decanting)</td><td class="es">Pallets por posición (decanting)</td><td>3</td><td>3</td><td>PlayBook § 5.1</td><td>PlayBook § 5.1</td></tr>
+    </table>
+  </div>
+
+  <!-- ==================== CALC 3: STAGE OUT ==================== -->
+  <div class="calc-card">
+    <div class="calc-header">
+      <div class="calc-icon">📤</div>
+      <div class="calc-title">
+        <h2 class="pt">Calculadora 3 — Stage Out (Expedição / RC in FC)</h2>
+        <h2 class="es">Calculadora 3 — Stage Out (Expedición / RC in FC)</h2>
+        <p class="pt">Dimensiona o Stage Out para HUs processadas aguardando expedição (RC in FC, MWH, Shipping)</p>
+        <p class="es">Dimensiona el Stage Out para HUs procesadas esperando expedición (RC in FC, MWH, Shipping)</p>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="pt">Tipo de processo</label>
+        <label class="es">Tipo de proceso</label>
+        <select id="c3_processo" onchange="onProcessoChange()">
+          <option value="tt_220" class="pt">Packing Mono/Multi TT (220 SIs/h)</option>
+          <option value="tt_220" class="es">Packing Mono/Multi TT (220 SIs/h)</option>
+          <option value="nt_150" class="pt">RC in FC NT — P2M (150 SIs/h)</option>
+          <option value="nt_150" class="es">RC in FC NT — P2M (150 SIs/h)</option>
+          <option value="mwh_50" class="pt">MWH (50 SIs/h)</option>
+          <option value="mwh_50" class="es">MWH (50 SIs/h)</option>
+          <option value="custom" class="pt">Personalizado</option>
+          <option value="custom" class="es">Personalizado</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="pt">THP (SIs/h por estação)</label>
+        <label class="es">THP (SIs/h por estación)</label>
+        <input type="number" id="c3_thp" value="220" min="1" max="2000" oninput="calcStageOut()">
+        <span class="form-hint pt">💡 Pré-preenchido ao selecionar o processo — pode ser ajustado livremente</span>
+        <span class="form-hint es">💡 Pre-completado al seleccionar el proceso — puede ajustarse libremente</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Nº de estações/células</label>
+        <label class="es">Nº de estaciones/células</label>
+        <input type="number" id="c3_estacoes" value="5" min="1" max="100" oninput="calcStageOut()">
+      </div>
+      <div class="form-group">
+        <label class="pt">Horas de acumulação antes da expedição</label>
+        <label class="es">Horas de acumulación antes de expedición</label>
+        <input type="number" id="c3_horas" value="2" min="0.5" max="24" step="0.5" oninput="calcStageOut()">
+        <span class="form-hint pt">Tempo entre processamento e primeiro CPT</span>
+        <span class="form-hint es">Tiempo entre procesamiento y primer CPT</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">SIs médios por HU</label>
+        <label class="es">SIs promedio por HU</label>
+        <input type="number" id="c3_sis_hu" value="20" min="1" max="200" oninput="calcStageOut()">
+        <span class="form-hint pt">Média de itens por Handling Unit</span>
+        <span class="form-hint es">Promedio de ítems por Handling Unit</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Tamanho da HU (m²)</label>
+        <label class="es">Tamaño de la HU (m²)</label>
+        <input type="number" id="c3_hu_area" value="1.2" min="0.3" max="4" step="0.1" oninput="calcStageOut()">
+        <span class="form-hint pt">Área de piso por HU (padrão: 1.2m × 1.0m)</span>
+        <span class="form-hint es">Área de piso por HU (estándar: 1.2m × 1.0m)</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Fator de buffer de segurança (%)</label>
+        <label class="es">Factor de buffer de seguridad (%)</label>
+        <input type="number" id="c3_buffer_pct" value="20" min="0" max="100" oninput="calcStageOut()">
+        <span class="form-hint pt">Adicional para variações de volume</span>
+        <span class="form-hint es">Adicional para variaciones de volumen</span>
+      </div>
+      <div class="form-group">
+        <label class="pt">Canalizações no Stage Out</label>
+        <label class="es">Canalizaciones en Stage Out</label>
+        <input type="number" id="c3_canalizacoes" value="3" min="1" max="50" oninput="calcStageOut()">
+        <span class="form-hint pt">Separação por destino/canalização</span>
+        <span class="form-hint es">Separación por destino/canalización</span>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <h3>📊 <span class="pt">Resultado</span><span class="es">Resultado</span></h3>
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="val" id="c3_r_sis_hora">1100</div>
+          <div class="unit">SIs/h</div>
+          <div class="label pt">Produção total (todas estações)</div>
+          <div class="label es">Producción total (todas estaciones)</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c3_r_sis_acum">2200</div>
+          <div class="unit">SIs</div>
+          <div class="label pt">SIs acumulados no período</div>
+          <div class="label es">SIs acumulados en el período</div>
+        </div>
+        <div class="result-item highlight">
+          <div class="val" id="c3_r_hus">110</div>
+          <div class="unit">HUs</div>
+          <div class="label pt">HUs no Stage Out</div>
+          <div class="label es">HUs en Stage Out</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c3_r_hus_buffer">132</div>
+          <div class="unit">HUs</div>
+          <div class="label pt">HUs + buffer de segurança</div>
+          <div class="label es">HUs + buffer de seguridad</div>
+        </div>
+        <div class="result-item highlight">
+          <div class="val" id="c3_r_area">158</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área total Stage Out</div>
+          <div class="label es">Área total Stage Out</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c3_r_area_canal">53</div>
+          <div class="unit">m²</div>
+          <div class="label pt">Área por canalização</div>
+          <div class="label es">Área por canalización</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c3_r_hus_canal">44</div>
+          <div class="unit">HUs</div>
+          <div class="label pt">HUs por canalização</div>
+          <div class="label es">HUs por canalización</div>
+        </div>
+        <div class="result-item">
+          <div class="val" id="c3_r_comprimento">26</div>
+          <div class="unit">m</div>
+          <div class="label pt">Comprimento estimado do Stage Out</div>
+          <div class="label es">Largo estimado del Stage Out</div>
+        </div>
+      </div>
+      <div id="c3_alert" class="alert yellow"></div>
+    </div>
+
+    <div class="formula-box">
+      <h4 class="pt">Fórmulas utilizadas</h4>
+      <h4 class="es">Fórmulas utilizadas</h4>
+      <p>
+        SIs_hora_total     = THP × Nº_estações<br>
+        SIs_acumulados     = SIs_hora_total × Horas_acumulação<br>
+        HUs_necessárias    = ⌈ SIs_acumulados ÷ SIs_por_HU ⌉<br>
+        HUs_com_buffer     = HUs_necessárias × (1 + Buffer% ÷ 100)<br>
+        Área_total         = HUs_com_buffer × Área_por_HU  (m²)<br>
+        Área_por_canal     = Área_total ÷ Nº_canalizações<br>
+        Comprimento_est.   = √ (Área_total ÷ 6)  (assumindo profundidade de 6m)
+      </p>
+    </div>
+
+    <div class="section-divider">
+      <h3 class="pt">Produtividades de referência (PlayBook)</h3>
+      <h3 class="es">Productividades de referencia (PlayBook)</h3>
+      <hr>
+    </div>
+    <table class="ref-table">
+      <tr><th class="pt">Processo</th><th class="es">Proceso</th><th>THP</th><th class="pt">Fonte</th><th class="es">Fuente</th></tr>
+      <tr><td class="pt">Packing Mono (TT)</td><td class="es">Packing Mono (TT)</td><td>220 SIs/h</td><td>Benchmark SP18</td><td>Benchmark SP18</td></tr>
+      <tr><td class="pt">Packing Multi / PTW (TT)</td><td class="es">Packing Multi / PTW (TT)</td><td>252 SIs/h</td><td>Benchmark SP18</td><td>Benchmark SP18</td></tr>
+      <tr><td class="pt">RC in FC NT — P2M</td><td class="es">RC in FC NT — P2M</td><td>150 SIs/h</td><td>PlayBook § 5</td><td>PlayBook § 5</td></tr>
+      <tr><td class="pt">MWH</td><td class="es">MWH</td><td>50 SIs/h</td><td>PlayBook § 5</td><td>PlayBook § 5</td></tr>
+    </table>
+  </div>
+
+  <!-- FOOTER NOTE -->
+  <div style="background:#fff;border-radius:12px;padding:20px 28px;margin-bottom:20px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid #eee;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <div>
+      <div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:4px" class="pt">📦 Calculadora de Área de Atrelamento — Cheapest Shipment</div>
+      <div style="font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:4px" class="es">📦 Calculadora de Área de Acoplamiento — Cheapest Shipment</div>
+      <div style="font-size:12px;color:#888" class="pt">Diagrama interativo com layout da zona Cheapest (triagem, gaiolas, Stage Out, doca)</div>
+      <div style="font-size:12px;color:#888" class="es">Diagrama interactivo con layout de la zona Cheapest (triaje, jaulas, Stage Out, muelle)</div>
+    </div>
+    <a href="calc-cheapest.html" style="background:#FF8F00;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap">Abrir calculadora →</a>
+  </div>
+  <div style="text-align:center;padding:16px;font-size:11px;color:#aaa">
+    <span class="pt">Calculadoras baseadas nos padrões técnicos do PlayBook CIE v1.0 · 2026 · Mercado Livre</span>
+    <span class="es">Calculadoras basadas en los estándares técnicos del PlayBook CIE v1.0 · 2026 · Mercado Libre</span>
+  </div>
+
+</div><!-- /page -->
+
+<script>
+// LANG TOGGLE
+function setLang(lang){
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active', b.getAttribute('data-lang')===lang);
+  });
+  const inlineTags = new Set(['SPAN','A','STRONG','EM','LABEL','TD','TH','OPTION']);
+  document.querySelectorAll('.pt').forEach(el=>{
+    el.style.display = lang==='pt' ? (inlineTags.has(el.tagName)?'inline':'block') : 'none';
+  });
+  document.querySelectorAll('.es').forEach(el=>{
+    el.style.display = lang==='es' ? (inlineTags.has(el.tagName)?'inline':'block') : 'none';
+  });
+  document.documentElement.lang = lang;
+  if (window.GRID) {
+    window.GRID.state.get().then(({ state, updated_at }) => {
+      window.GRID.state.set({ ...state, lang }, updated_at);
+    });
+  }
+}
+document.addEventListener('DOMContentLoaded', async () => {
+  let saved = 'pt';
+  if (window.GRID) {
+    const { state } = await window.GRID.state.get();
+    if (state && state.lang) saved = state.lang;
+  }
+  setLang(saved);
+});
+
+// UTILS
+function ceil(v){return Math.ceil(v)}
+function round1(v){return Math.round(v*10)/10}
+function round2(v){return Math.round(v*100)/100}
+function fmt(v,d=1){return Number(round1(v)).toLocaleString('pt-BR',{minimumFractionDigits:d>1?d:0,maximumFractionDigits:d})}
+
+// ==================== CALC 1: CARRINHOS ====================
+function calcCarrinhos(){
+  const qtd     = parseFloat(document.getElementById('c1_qtd').value)||0;
+  const larg    = parseFloat(document.getElementById('c1_larg').value)||61;
+  const prof    = parseFloat(document.getElementById('c1_prof').value)||80;
+  const fileiras= parseInt(document.getElementById('c1_fileiras').value)||2;
+  const fita    = parseFloat(document.getElementById('c1_fita').value)||5;
+
+  const espPos   = larg + fita;            // cm per position
+  const posFileira = Math.ceil(qtd/fileiras);
+  const comprM   = round2(posFileira * espPos / 100);
+  const largM    = round2(prof * fileiras / 100);
+  const areaM2   = round2(comprM * largM);
+
+  document.getElementById('c1_r_posicoes').textContent = posFileira;
+  document.getElementById('c1_r_compr').textContent    = fmt(comprM);
+  document.getElementById('c1_r_larg_total').textContent = fmt(largM);
+  document.getElementById('c1_r_area').textContent     = fmt(areaM2);
+  document.getElementById('c1_r_esp_pos').textContent  = espPos;
+
+  const alertEl = document.getElementById('c1_alert');
+  if(qtd < 30){
+    alertEl.className='alert red';
+    alertEl.innerHTML='<strong>⚠ Abaixo do mínimo recomendado</strong> O PlayBook define 30 carrinhos como quantidade mínima por buffer. Considere aumentar para '+30+' carrinhos (área necessária: '+fmt(Math.ceil(30/fileiras)*espPos/100 * round2(prof*fileiras/100))+' m²).';
+    alertEl.style.display='block';
+  } else if(qtd > 100){
+    alertEl.className='alert yellow';
+    alertEl.innerHTML='<strong>💡 Buffer grande</strong> Considere dividir em sub-buffers por área ou turno para facilitar a gestão.';
+    alertEl.style.display='block';
+  } else {
+    alertEl.className='alert green';
+    alertEl.innerHTML='<strong>✓ Dimensionamento adequado</strong> Buffer dentro dos parâmetros do PlayBook.';
+    alertEl.style.display='block';
+  }
+}
+
+// ==================== CALC 2: STAGE IN ====================
+function calcStageIn(){
+  const docas      = parseFloat(document.getElementById('c2_docas').value)||0;
+  const veiculo    = parseInt(document.getElementById('c2_veiculo').value)||28;
+  const operacao   = document.getElementById('c2_operacao').value;
+  const pctAtivas  = parseFloat(document.getElementById('c2_pct_ativas').value)||70;
+  const largDoca   = parseFloat(document.getElementById('c2_larg_doca').value)||3.5;
+  const pilha      = parseInt(document.getElementById('c2_pilha').value)||3;
+
+  const docasAtivas     = Math.ceil(docas * pctAtivas / 100);
+  const palletsDecanting= veiculo * pilha;           // pallets no piso por caminhão
+  const docasConsumidas = round2(palletsDecanting / 30); // 30 positions per dock stage
+  const profStage       = 10;                        // m
+  const profDecant      = operacao === 'nt' ? 15 : 8;// m
+  const distanciaHS     = operacao === 'nt' ? 38 : 25; // m
+  const areaStage       = round2(profStage * largDoca);
+  const areaDecanting   = round2(profDecant * largDoca);
+  const areaTotal       = round2(docasAtivas * (areaStage + areaDecanting));
+  const posTotal        = docas * 30;
+
+  document.getElementById('c2_r_docas_ativas').textContent    = docasAtivas;
+  document.getElementById('c2_r_pallets_doca').textContent    = palletsDecanting;
+  document.getElementById('c2_r_area_stage').textContent      = fmt(areaStage);
+  document.getElementById('c2_r_area_decanting').textContent  = fmt(areaDecanting);
+  document.getElementById('c2_r_area_total').textContent      = fmt(areaTotal);
+  document.getElementById('c2_r_distancia').textContent       = distanciaHS;
+  document.getElementById('c2_r_docas_decanting').textContent = fmt(docasConsumidas);
+  document.getElementById('c2_r_posicoes_total').textContent  = posTotal;
+
+  const alertEl = document.getElementById('c2_alert');
+  const pctDecantingConsume = round2(docasConsumidas/docasAtivas*100);
+
+  if(operacao==='nt' && pctDecantingConsume > 50){
+    alertEl.className='alert red';
+    alertEl.innerHTML='<strong>⚠ Risco operacional NT</strong> O decanting está consumindo '+pctDecantingConsume+'% das docas ativas. Revise a distância HS→Doca (mínimo 38m) e a separação entre fluxos. Lição aprendida: BA02 (CM#12).';
+  } else if(pctDecantingConsume > 35){
+    alertEl.className='alert yellow';
+    alertEl.innerHTML='<strong>💡 Atenção ao decanting</strong> O decanting consome '+pctDecantingConsume+'% das docas ativas. Monitore o impacto na capacidade de recebimento.';
+  } else {
+    alertEl.className='alert green';
+    alertEl.innerHTML='<strong>✓ Dimensionamento adequado</strong> Proporção de decanting dentro do esperado.';
+  }
+  alertEl.style.display='block';
+}
+
+// ==================== CALC 3: STAGE OUT ====================
+function onProcessoChange(){
+  // Pre-fill THP only when the user changes the process selector
+  const thpMap = {tt_220:220, nt_150:150, mwh_50:50, custom:null};
+  const processo = document.getElementById('c3_processo').value;
+  if(thpMap[processo] !== null){
+    document.getElementById('c3_thp').value = thpMap[processo];
+  }
+  calcStageOut();
+}
+
+function calcStageOut(){
+  // Always uses whatever value is in the THP field — freely editable
+  const thp       = parseFloat(document.getElementById('c3_thp').value)||220;
+  const estacoes  = parseInt(document.getElementById('c3_estacoes').value)||1;
+  const horas     = parseFloat(document.getElementById('c3_horas').value)||2;
+  const sisHU     = parseInt(document.getElementById('c3_sis_hu').value)||20;
+  const huArea    = parseFloat(document.getElementById('c3_hu_area').value)||1.2;
+  const bufferPct = parseFloat(document.getElementById('c3_buffer_pct').value)||20;
+  const canalizacoes = parseInt(document.getElementById('c3_canalizacoes').value)||3;
+
+  const sisHoraTotal  = thp * estacoes;
+  const sisAcum       = sisHoraTotal * horas;
+  const husBase       = Math.ceil(sisAcum / sisHU);
+  const husBuffer     = Math.ceil(husBase * (1 + bufferPct/100));
+  const areaTotal     = round2(husBuffer * huArea);
+  const areaCanal     = round2(areaTotal / canalizacoes);
+  const husCanal      = Math.ceil(husBuffer / canalizacoes);
+  const comprimento   = round2(Math.sqrt(areaTotal / 6));
+
+  document.getElementById('c3_r_sis_hora').textContent   = fmt(sisHoraTotal,0);
+  document.getElementById('c3_r_sis_acum').textContent   = fmt(sisAcum,0);
+  document.getElementById('c3_r_hus').textContent        = husBase;
+  document.getElementById('c3_r_hus_buffer').textContent = husBuffer;
+  document.getElementById('c3_r_area').textContent       = fmt(areaTotal);
+  document.getElementById('c3_r_area_canal').textContent = fmt(areaCanal);
+  document.getElementById('c3_r_hus_canal').textContent  = husCanal;
+  document.getElementById('c3_r_comprimento').textContent= fmt(comprimento);
+
+  const alertEl = document.getElementById('c3_alert');
+  if(areaTotal > 500){
+    alertEl.className='alert yellow';
+    alertEl.innerHTML='<strong>💡 Stage Out grande</strong> '+fmt(areaTotal)+'m² é uma área expressiva. Considere aumentar a frequência de expedições ou reduzir o tempo de acumulação.';
+  } else if(husBuffer < 10){
+    alertEl.className='alert yellow';
+    alertEl.innerHTML='<strong>💡 Stage Out pequeno</strong> Verifique se os parâmetros de THP e acumulação estão corretos.';
+  } else {
+    alertEl.className='alert green';
+    alertEl.innerHTML='<strong>✓ Calculado</strong> Stage Out dimensionado para '+husBuffer+' HUs ('+fmt(areaTotal)+'m²) com buffer de '+bufferPct+'%.';
+  }
+  alertEl.style.display='block';
+}
+
+// ==================== INIT ====================
+window.onload = function(){
+  calcCarrinhos();
+  calcStageIn();
+  calcStageOut();
+};
+</script>
+</body>
+</html>
