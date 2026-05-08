@@ -1,22 +1,24 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadoras | PlayBook Fulfillment CIE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F5F6FA;color:#2d2d2d;min-height:100vh}
+body{font-family:'Proxima Nova','Montserrat',sans-serif;background:#F5F6FA;color:#2d2d2d;min-height:100vh}
 
 /* TOP BAR */
-.topbar{background:#1A1A2E;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar{background:#FFE600;color:#1A1A2E;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
 .topbar-left{display:flex;align-items:center;gap:16px}
-.topbar a{color:#FFE600;font-size:13px;font-weight:700;text-decoration:none}
+.topbar a{color:#1A1A2E;font-size:13px;font-weight:700;text-decoration:none}
 .topbar a:hover{text-decoration:underline}
-.topbar h1{font-size:16px;font-weight:800;color:#fff}
+.topbar h1{font-size:16px;font-weight:800;color:#1A1A2E}
 .lang-toggle{display:flex;background:#0d0d1f;border-radius:6px;overflow:hidden}
 .lang-btn{padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s}
-.lang-btn.active{background:#FFE600;color:#1A1A2E}
+.lang-btn.active{background:#1A1A2E;color:#FFE600}
 
 /* PAGE */
 .page{max-width:960px;margin:0 auto;padding:28px 24px}
@@ -24,7 +26,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 /* CALC CARD */
 .calc-card{background:#fff;border-radius:12px;padding:28px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid #eee}
 .calc-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding-bottom:16px;border-bottom:2px solid #f0f0f0}
-.calc-icon{width:48px;height:48px;border-radius:10px;background:#1A1A2E;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.calc-icon{width:48px;height:48px;border-radius:16px;background:#1A1A2E;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .calc-title h2{font-size:18px;font-weight:800;color:#1A1A2E;margin-bottom:3px}
 .calc-title p{font-size:12px;color:#888}
 
@@ -38,10 +40,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .form-group .standard{font-size:11px;color:#43a047;font-weight:700}
 
 /* RESULT PANEL */
-.result-panel{background:#f8f9ff;border:1px solid #e0e4ff;border-radius:8px;padding:20px;margin-top:4px}
+.result-panel{background:#f8f9ff;border:1px solid #e0e4ff;border-radius:12px;padding:20px;margin-top:4px}
 .result-panel h3{font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:14px;display:flex;align-items:center;gap:6px}
 .result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
-.result-item{background:#fff;border-radius:8px;padding:14px;text-align:center;border:1px solid #eef}
+.result-item{background:#fff;border-radius:12px;padding:14px;text-align:center;border:1px solid #eef}
 .result-item .val{font-size:24px;font-weight:800;color:#1A1A2E;line-height:1}
 .result-item .unit{font-size:11px;color:#888;margin-top:4px}
 .result-item .label{font-size:11px;color:#555;margin-top:6px;font-weight:600}
@@ -57,7 +59,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .alert strong{font-weight:800}
 
 /* FORMULA BOX */
-.formula-box{background:#1A1A2E;border-radius:8px;padding:14px;margin-top:14px}
+.formula-box{background:#1A1A2E;border-radius:12px;padding:14px;margin-top:14px}
 .formula-box h4{font-size:11px;color:#FFE600;font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px}
 .formula-box p{font-size:12px;color:#ccc;line-height:1.8;font-family:monospace}
 
@@ -567,7 +569,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div style="font-size:12px;color:#888" class="pt">Diagrama interativo com layout da zona Cheapest (triagem, gaiolas, Stage Out, doca)</div>
       <div style="font-size:12px;color:#888" class="es">Diagrama interactivo con layout de la zona Cheapest (triaje, jaulas, Stage Out, muelle)</div>
     </div>
-    <a href="calc-cheapest.html" style="background:#FF8F00;color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap">Abrir calculadora →</a>
+    <a href="calc-cheapest.html" style="background:#FF8F00;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap">Abrir calculadora →</a>
   </div>
   <div style="text-align:center;padding:16px;font-size:11px;color:#aaa">
     <span class="pt">Calculadoras baseadas nos padrões técnicos do PlayBook CIE v1.0 · 2026 · Mercado Livre</span>

@@ -1,30 +1,32 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculadora — Área de Atrelamento Cheapest | CIE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F5F6FA;color:#2d2d2d}
+body{font-family:'Proxima Nova','Montserrat',sans-serif;background:#F5F6FA;color:#2d2d2d}
 
 /* TOP BAR */
-.topbar{background:#1A1A2E;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
+.topbar{background:#FFE600;padding:14px 24px;display:flex;align-items:center;justify-content:space-between}
 .topbar-nav{display:flex;align-items:center;gap:12px}
-.topbar-nav a{color:#FFE600;font-size:12px;font-weight:700;text-decoration:none;opacity:.8}
+.topbar-nav a{color:#1A1A2E;font-size:12px;font-weight:700;text-decoration:none;opacity:.8}
 .topbar-nav a:hover{opacity:1}
 .topbar-nav span{color:#555;font-size:12px}
-.topbar h1{font-size:15px;font-weight:800;color:#fff;margin-left:4px}
+.topbar h1{font-size:15px;font-weight:800;color:#1A1A2E;margin-left:4px}
 .lang-toggle{display:flex;background:#0d0d1f;border-radius:6px;overflow:hidden}
 .lang-btn{padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#888;transition:all .2s}
-.lang-btn.active{background:#FFE600;color:#1A1A2E}
+.lang-btn.active{background:#1A1A2E;color:#FFE600}
 
 /* LAYOUT */
 .page{max-width:1100px;margin:0 auto;padding:24px}
 .hero{background:linear-gradient(135deg,#1A1A2E,#0F3460);color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
 .hero-text h1{font-size:20px;font-weight:800;margin-bottom:6px}
 .hero-text p{font-size:13px;opacity:.8;line-height:1.6;max-width:560px}
-.hero-ref{background:rgba(255,230,0,.12);border:1px solid rgba(255,230,0,.3);border-radius:8px;padding:12px 16px;min-width:200px}
+.hero-ref{background:rgba(255,230,0,.12);border:1px solid rgba(255,230,0,.3);border-radius:12px;padding:12px 16px;min-width:200px}
 .hero-ref p{font-size:11px;color:#FFE600;font-weight:700;margin-bottom:6px}
 .hero-ref table{font-size:11px;color:#ccc;width:100%;border-collapse:collapse}
 .hero-ref td{padding:2px 6px 2px 0}
@@ -50,7 +52,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 /* RESULT CARDS */
 .result-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
-.result-card{background:#f8f9ff;border:1px solid #e4e8ff;border-radius:8px;padding:12px;text-align:center}
+.result-card{background:#f8f9ff;border:1px solid #e4e8ff;border-radius:12px;padding:12px;text-align:center}
 .result-card.big{background:#1A1A2E;border-color:#1A1A2E}
 .result-card .val{font-size:22px;font-weight:800;color:#1A1A2E;line-height:1}
 .result-card.big .val{color:#FFE600;font-size:26px}
@@ -73,16 +75,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .diagram-panel{background:#fff;border-radius:12px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,.07);border:1px solid #eee}
 .diagram-title{font-size:13px;font-weight:800;color:#1A1A2E;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;display:flex;align-items:center;gap:8px}
 .diagram-subtitle{font-size:11px;color:#999;margin-bottom:16px}
-.diagram-wrap{background:#f0f4ff;border:1px solid #dde3ff;border-radius:8px;overflow:hidden}
+.diagram-wrap{background:#f0f4ff;border:1px solid #dde3ff;border-radius:12px;overflow:hidden}
 svg#layout{width:100%;display:block}
 
 /* LEGEND */
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding:12px;background:#f8f9ff;border-radius:8px;border:1px solid #e4e8ff}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding:12px;background:#f8f9ff;border-radius:12px;border:1px solid #e4e8ff}
 .legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:#555}
 .legend-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0}
 
 /* FORMULA */
-.formula{background:#1A1A2E;border-radius:8px;padding:14px;margin-top:14px}
+.formula{background:#1A1A2E;border-radius:12px;padding:14px;margin-top:14px}
 .formula h4{font-size:10px;color:#FFE600;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
 .formula p{font-size:11px;color:#ccc;font-family:monospace;line-height:1.9}
 
@@ -395,7 +397,7 @@ svg#layout{width:100%;display:block}
         </table>
 
         <!-- PROCESS FLOW NOTE -->
-        <div style="margin-top:16px;background:#f8f9ff;border:1px solid #e4e8ff;border-radius:8px;padding:14px">
+        <div style="margin-top:16px;background:#f8f9ff;border:1px solid #e4e8ff;border-radius:12px;padding:14px">
           <div style="font-size:11px;font-weight:800;color:#1A1A2E;margin-bottom:8px" class="pt">⟶ Fluxo operacional Cheapest</div>
           <div style="font-size:11px;font-weight:800;color:#1A1A2E;margin-bottom:8px" class="es">⟶ Flujo operativo Cheapest</div>
           <div style="font-size:11px;color:#555;line-height:2;font-family:monospace">
